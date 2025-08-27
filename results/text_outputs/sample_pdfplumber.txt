@@ -1,0 +1,965 @@
+Article
+A Vehicle Density Estimation Traffic Light Control System
+Using a Two-Dimensional Convolution Neural Network
+MaloseJohnMathiane*,ChunlingTu,PiusAdewale andMukatshungNawej
+DepartmentofComputersSystemEngineering,FacultyofInformationandCommunicationTechnology,
+TshwaneUniversityofTechnology,Soshanguve,Pretoria0001,SouthAfrica;duc@tut.ac.za(C.T.);
+owolawipa@tut.ac.za(P.A.);nawejmc@tut.ac.za(M.N.)
+* Correspondence:mjjohn.malose@gmail.com
+Abstract:Oneoftheworld’schallengesistheamountoftrafficontheroads.Waitingforthegreen
+lightisamajorcauseoftrafficcongestion. Lowthroughputratesandeventualcongestioncome
+frommanytrafficsignalsthatarehardcoded,irrespectiveofthevolumeoftheamountoftraffic.
+Insteadofdependingonpredefinedtimeintervals, itisessentialtobuildatrafficsignalcontrol
+systemthatcanreacttochangingvehicledensities.Emergencyvehicles,likeambulances,mustbe
+givenpriorityattheintersectionsoasnottospendmoretimeatthetrafficlight.Computervision
+techniquescanbeusedtoimproveroadtrafficsignalcontrolandreducereal-timetrafficdelays
+atintersectionswithouttherequirementforsubstantialinfrastructureanalysis. Longwaittimes
+andsignificantenergyconsumptionarejusttwooftheproblemsofthecurrenttrafficsignalcontrol
+system.Tooptimalefficiency,thetrafficsignal’sdurationmustbedynamicallychangedtoaccountfor
+currenttrafficvolume.Tolessencongestion,theapproachtakeninthisresearchfocusesonmodifying
+trafficsignaltimedeterminedbythedensityofvehiclesatthecrossroads. Themainpurposeof
+thisarticleistodemonstrateheavytrafficandemergencyvehicleprioritizationfromalldirections
+atthetrafficintersectionforaspeedypassage. UsingthePygametool, theproposedmethodin
+thisstudy,whichincludesamechanismforestimatingtrafficdensityandprioritizationbycounting
+vehiclesatatrafficjunction,isdemonstrated.Thevehiclethroughputfortheadaptivetrafficlight
+Citation:Mathiane,M.J.;Tu,C.; builtusingPygameiscomparedwiththevehiclepassratefortheadaptivetrafficlightbuiltusing
+Adewale,P.;Nawej,M.AVehicle SimulationofUrbanMobility(SUMO).Thesimulationresultsshowthattheadaptivetrafficlight
+DensityEstimationTrafficLight builtusingPygameachieves90%throughputcomparedtotheadaptivetrafficlightbuiltusingSUMO.
+ControlSystemUsinga ATwo-DimensionalConvolutionalNeuralNetwork(2D-CNN)isimplementedusingTensorflow
+Two-DimensionalConvolution forvehicleclassification. The2D-CNNmodeldemonstrated96%accuracyinclassifyingvehicles
+NeuralNetwork.Vehicles2023,5,
+usingthetestdataset.Additionally,emergencyvehicles,suchasambulances,aregivenpriorityfor
+1844–1862. https://doi.org/
+quickpassing.
+10.3390/vehicles5040099
+AcademicEditors:PeterGasparand Keywords:intelligenttrafficsystem;lanepriority;objectdetection;artificialintelligence;Pygame;
+JunnianWang SUMO;2D-CNN;smarttrafficmanagementsystem
+Received:13November2023
+Revised:10December2023
+Accepted:12December2023
+1. Introduction
+Published:15December2023
+Theregulationoftrafficlightsplaysacrucialroleineverysmarttrafficmanagement
+system. Thetwomainfactorstobetakenintoaccountintrafficlightmanagementarethe
+greenlightseriesandtheperiodofgreenlight[1]. Trafficcongestionincitiesisbecominga
+Copyright: © 2023 by the authors.
+biggerproblem. Peoplecommutelongerdistancestowork,school,andshops,attendsocial
+Licensee MDPI, Basel, Switzerland.
+events,anddealwithtrafficjamsandaccidents[2]. Fixedsignaltimerintersectiontraffic
+This article is an open access article
+controlsystemsarethesourceofmanytraffic-relatedproblems. Theyreplicateanidentical
+distributed under the terms and
+phasesequenceanditslengthwithoutanymodifications. Thefieldofintelligenttransport
+conditionsoftheCreativeCommons
+systemsoffersnovelsolutionsfortrafficcontrolinresponsetothegrowingdemandfor
+Attribution(CCBY)license(https://
+roadcapacity[3].
+creativecommons.org/licenses/by/
+4.0/).
+Vehicles2023,5,1844–1862.https://doi.org/10.3390/vehicles5040099 https://www.mdpi.com/journal/vehiclesVehicles2023,5 1845
+Thetimingmerelyservesasthedefaultsettingformanagingwhatmightbereferred
+toasordinarytraffic[4]. Althougheachroadjunctionhasadifferenttrafficlighttiming
+design,therearetrafficlightsattheintersectionsthatarealwaysonforapredetermined
+amountoftime[5].
+However,manyofthecurrentsystemsuseanextremelybasicsequence. Currently,
+threestandardsystemsoftrafficcontrolareinuse:
+• Manualcontrol: Asthenameimplies,trafficcontrolinvolveshumanintervention. To
+managetraffic,trafficpolicearepostedinaspecificlocation;
+• Traditionaltrafficlightswithfixedtimers: Timersareusedtocontrolthis. Thetimeris
+settoaconstantvalue. Thetimervaluedetermineswhenthelightsautomaticallyturn
+fromredtogreen[6];
+• Electronicsensors: Anotherstate-of-the-artoptionistoplaceproximityorloopde-
+tectorsbesidetheroad. Thissensorcollectsinformationabouttrafficinvehicles. The
+trafficlightsaremanagedbymeansofsensordata[7].
+These traditional approaches have several shortcomings. It takes a lot of work to
+operatethemanualregulatingmechanism. Handlingallthetrafficinacityortownby
+hand becomes very difficult when resources are scarce. This calls for the need for an
+upgradedtrafficmanagementsystem. Statictrafficconflictsarehandledbyatrafficsignal
+withapre-programmedtimerforeachphasethatdoesnotrespondtorealtrafficonthe
+route. [8]. Accuracy and coverage are typically at odds when using electronic sensors,
+suchasproximitysensorsorloopdetectors,andalimitedbudgetwilllimitthenumberof
+facilitiesavailablebecausehigh-qualitydatacollectiontypicallyrequiresexpensiveand
+complexhardware. Furthermore,alargenumberofsensorsareusuallyneededtogive
+comprehensivecoveragethroughoutanetworkoffacilitiesduetotherestrictedeffective
+rangeofmostsensors[9].
+Deeplearning-basedmodelshavebeenwidelyintroducedfortrafficmanagement
+systemsinrecentyearsduetotheirsuperiorobjectdetectionaccuracycomparedtotradi-
+tionalmachinelearningalgorithms,suchassupportvectormachinesandimageprocessing
+algorithms[10]. ConvolutionalactivityconstitutesoneofCNN’sfoundations.
+Thereislessneedforhumanstoperformcertaintasksthankstothewidespreadau-
+tomationofprocessesandgoal-achievingcapabilitiesofmoderntechnologies. Acomputer
+can undoubtedly complete tasks faster and more accurately than a human, despite the
+fallibility of humans [11]. Robots can now learn on their own instead of needing to be
+programmedwitheverypossibleactionandoutcomethankstothistechnologicaladvance-
+ment[12]Convolutionneuralnetworks,TensorFlow,andKeraswereutilizedinthisstudy
+becausetheywerenecessary[13].
+The foundation of a convolutional neural network is the perceptron model. As a
+result, photos are now classified differently. A CNN, or ConvNets, is an example of a
+deeplearningarchitecture[14]. Amongmanyotherapplications,theyworkbestinfacial
+recognitionandobjectdetection. Self-drivingcarshavealsobenefitedfromthem. Dueto
+theirexceptionalabilitytoidentifymeaningfulpatternswithinimagesbycomprehending
+thespatialstructureoftherelevantinput,thesenetworksarehelpfulforimageanalysis
+andclassification. CNNsaredesignedtotakeadvantageofthespatialdata,incontrastto
+traditionalneuralnetworksthatignorespatialstructures,suchaspixels,thatarefurther
+apartorclosertogether[15]. Figure1showsthebasicarchitectureofaCNN.
+The fundamental objective of the newly implemented method in this article is to
+increasetheoverallnumberofcarsthatcanpassthroughajunctionwhilesimultaneously
+reducingtheamountoftimethateachtrackofvehiclesmustwaitforasignal,giventhe
+mathematicalfunctionusedtocomputewaitingtimes. Thankstothissystem’scapacity
+toinstantlyadapttotheflowoftrafficthere,vehiclesshouldbeabletodrivethroughthe
+intersectionasquicklyasfeasible. Sincetrafficdensityvariesdependingonthetimeofday
+(morning,duringtheday,intheafternoonsorevenings),theadaptiveintelligencelight
+systemanalysesfluctuationsintrafficvolume. Thesuggestedframeworkaimstoprovide
+a crossroad signal that can adapt to the movement of traffic. This aims to increase theVehicles2023,5 1846
+amountoftimebetweengreensignalsandminimizedelays,congestion,andwaitingtimes
+bymovingtrafficthroughthesystemconsiderablymorequicklythaninastaticsystem.
+Additionally,thesystemdetectsandmodifiesthetrafficgreenlighttimingtoallowfora
+quickerpassthroughatjunctions,andspecialdutyvehicles,likeambulances,aregiven
+priorityattheintersectionusingthe2DCNNmodelforvehicleclassification. Thisarticle
+includesthefollowingsections. Theliteraturereviewdiscussesthecontributionsofother
+expertsonthesubject,detailsthecomponentsofcurrenttrafficmanagementsystems,and
+isfollowedbymethodologysectionsthatdemonstratetheproposedmethodandmodel,in
+whichtrafficlightsarementionedasoneofthemaincontemporarysourcesofcongestion,
+and the problem is defined in terms of its history and effects. All of the traffic density-
+reductionstrategies’simulatedmodelsandproceduresarediscussed. Thesimulationand
+experimentalfindingsarethenanalyzed,andthelogicalpartsoftrafficsystems,suchas
+thetrafficsimulationsettingtechnique,areexplained. Thesectioncomparesandanalyzes
+datagatheredfromthesimulationprograms,aswellasdatavisualization. Finally,there
+Vehicles 2023, 5, FOR PEER REVIEW 3
+isaconclusionfollowedbyfuturework,whichpresentsthesummary,conclusiontaken,
+limitations,andcontributionstoknowledge.
+Figure1.Artificialintelligencemodelofabasicperceptron.
+Figure 1. Artificial intelligence model of a basic perceptron.
+2. RelatedWork
+The fundamental objective of the newly implemented method in this article is to in-
+Whentrafficisheavy,criticalresponsetimescouldbeshortenedbyputtingtherec-
+crease the overall number of cars that can pass through a junction while simultaneously
+ommendedsmarttrafficmanagementsystemintopractice. Inthepast,manualmethods
+reducing the amount of time that each track of vehicles must wait for a signal, given the
+were insufficient to control traffic as needed. The number of cars on the road today is
+mathematical function used to compute waiting times. Thanks to this system’s capacity to
+toomanyfortheinfrastructurethatcurrentlyexists. Inmetropolitanareas,thisproblem
+instantly adapt to the flow of traffic there, vehicles should be able to drive through the
+affectsalargerpopulation. Alotofresearchhasbeenperformedontrafficmanagement
+intersection as quickly as feasible. Since traffic density varies depending on the time of
+employingtheintelligentapproachofusingtrafficdatatodeterminethestateofthegreen
+day (morning, during the day, in the afternoons or evenings), the adaptive intelligence
+light. Intelligenttrafficcontrolisabroadtopic,andTable1liststhemethodsthathavebeen
+light system analyses fluctuations in traffic volume. The suggested framework aims to
+usedrecently.
+provide a crossroad signal that can adapt to the movement of traffic. This aims to increase
+the amount of time between green signals and minimize delays, congestion, and waiting
+Table1.Differentintelligenttrafficcontrolmethodologies.
+times by moving traffic through the system considerably more quickly than in a static
+Reference system. Additionally, the system detects and modifies the traffic green light timing to al-
+Methodology MainContribution Limitations
+Number low for a quicker pass through at junctions, and special duty vehicles, like ambulances,
+are given priorTihtye calats stihcea pipnrtoearcshetcotaiosnig nuaslitnimgi ntghe 2D CNN model for vehicle classification.
+Thetrafficdatacollectedinafixedperiod,
+optimizationproblemwascombinedwiththeidea
+AsignaltimiTnghis article includes the following sections. The litersautcuhraes rpeevakietiwm ed,iisstchuesosnelys ftahcteo rccoonntsridiberued-
+ofbuspriority.Anewmethodologythat
+[16] optimizationmodteilobnasse odf othspeerc iefixcaplleyrctos nosnid ethreed spuasbsjeencgte,r ddeetlaayildsu trhineg ctohme pobnyethnetosp otifm ciuzartrieonntm tordaeffilwc hmenaunpadgaetimngetnhte
+onbuspriority. signaltimingscheme.Thismaynotbefeasible
+systems, asnigdn iasl tfiomlilnogwoepdtim biyza mtioenthproodceoslsowgays sperecsteinotneds that demonstrate the proposed method
+fortrafficdatacollectedinnearreal-time.
+asasolutiontothisissue.
+and model, in which traffic lights are mentioned as one of the main contemporary sources
+Intelligentmoniotofr icnogngestionT,h eanmdet htohde upsersovbelheimcle iidse dnteifificnateiodn iann dterms Tohfe ittesc hhniisqtuoernye eadnsdto ebffeiemcptsr.o vAedll inofte rtmhes
+localizationtoprovidereal-time,accurate,and ofprocessingdatacollectedontheroad
+[17] technologyoftraftfircaflffiowc density-reduction strategies’ simulated models and procedures are discussed. The
+robusttrafficflowdatacollectionon segments,anditislimitedwhenitcomesto
+basedoncomputervision.
+simulation and experimreonadtasle gfimnedntisn.gs are then analyzed, andh igthh-ere lsoolguitcioanl ipmaargtess .of traffic
+systems, such as the traffic simulation setting technique, are explained. The section com-
+pares and analyzes data gathered from the simulation programs, as well as data visuali-
+zation. Finally, there is a conclusion followed by future work, which presents the sum-
+mary, conclusion taken, limitations, and contributions to knowledge.
+2. Related Work
+When traffic is heavy, critical response times could be shortened by putting the rec-
+ommended smart traffic management system into practice. In the past, manual methods
+were insufficient to control traffic as needed. The number of cars on the road today is too
+many for the infrastructure that currently exists. In metropolitan areas, this problem af-
+fects a larger population. A lot of research has been performed on traffic management
+employing the intelligent approach of using traffic data to determine the state of the green
+light. Intelligent traffic control is a broad topic, and Table 1 lists the methods that have
+been used recently.Vehicles2023,5 1847
+Table1.Cont.
+Reference
+Methodology MainContribution Limitations
+Number
+Toallowforminimaltrafficcongestion,thedivider Thesystemcountsthenumberofcarsand
+isadjustedinaccordancewiththenumberof recognizesanambulanceusingimage
+Anadaptivetraffic
+vehiclesontheroad.Whenthereistraffic processingtechniques.Machinelearning
+congestioncontrol
+[13] congestion,itischallengingtomovewhenan algorithmsmaybeusedinthefutureto
+approachwithemergency
+ambulanceispassingontheroad.UsinganRFID monitordifferentkindsofemergencyvehicles,
+vehicleprotocol.
+readerandanRFIDtag,thisconceptavoids suchaspolicecarsandfiretrucks,andto
+thisissue. increasetheaccuracyofvehicleidentification.
+Asuggestedtechniqueforpriority-basedvehicle
+Thevehiclecountmechanismthatwould
+identificationmakesuseoftechniquesfromthe
+AnIOT-basedtraffic prioritizeotherlaneswithheaviertrafficin
+[18] pictureprocessingindustry.Ifanemergency
+controllingsystem. additiontoemergencyvehiclesisabsentfrom
+vehicleisidentified,thatlanewilltakeprecedence
+theproposedsystem.
+overallotherlanes.
+Emergencyvehicletype Thepre-trainedmodelinthiswork,VGG-16,hada Themodulemayhavelearnedfromthecolor
+classificationusinga smallerconvolutionallayerandfiltersize.The ofthefeatureandneedssometweaksbecause
+[10]
+convolutionalneural experimentyieldeda95%accuracyrateforthe itrecognizesatypicalredcarasafiretruckand
+network. suggestedmethod. awhitecarasapolicecar.
+Thisworkproposesanintelligenttransportation
+systemthatcanmonitornearbyvehiclesand Theproposedmethodologydoesnothave
+Abidirectionalvehicle
+signalstomonitorothervehiclestoprevent intelligenceincontrollingthetrafficlights,and
+platooning-basedintelligent
+accidentsandshortenwaittimesatbusy noemergencyvehiclesaregivenpriorityat
+transportationsystem.
+intersectionsbygivingdriversaccessto theintersection.
+pertinentdata.
+Anintelligentvehiculartrafficmanagementandcontrolsystemissuggestedinthisre-
+search[19].Usinganalgorithmbasedonseveralcriteriaanddeterminingtheoptimalroutes
+wherethereistheleastamountofcongestion, thesuggestedstrategyseekstodecrease
+theproblemoftrafficcongestionandmaketrafficsignalsfunctioneffectively,eliminating
+traffic jams. Other forms of communication technology, such as cellular networks and
+GeographicPositioningSystems(GPS),mustbeintegratedwiththeproposedsystem[19].
+Thejunctioncontrolissueinsmartcitieswithsmarttransportationsystemswasexamined
+inthiswork[20]. Incontrasttocurrentdesigns,thesuggestedmethoddividestheparked
+cars in a lane into various groups. Through V2I communications, the okay to pass an
+intersectionisthensentintermsofvehiclegroupings[20]. Findingtherightgroupings
+basedoncurrenttrafficcircumstancespresentsthegreatestchallenge. Theapproachforthe
+onlinecollectionofvehiclestatusonaroadinanurbansettingemployingclusteringin
+vehicularadhocnetworksisprovidedinthisresearch[21]. Toautomaticallyschedulethe
+trafficwithinitsfieldofvisionwithoutcontactingotherintersectionsoracentralcontrol
+system,theinformationacquiredissenttothetrafficlightattheintersection[19]. Results
+obtainedrevealthatthesuggestedstrategysignificantlyreducestheaverageglobaldelay
+andincreasesthefrequencyofnon-stoppedvehiclemovements.
+Aflexibletrafficsignal-regulatedmethodwassuggestedforthisstudy[4]todecrease
+theaveragetimespentwaitingatanintersectionandincreasetrafficthroughput.Incontrast
+toafixed-timecontrolalgorithmandanactuatedcontrolapproach,theexperimentalresults
+demonstratedthattheproposedformulamightresultinhigherthroughputandshorter
+vehiclewaitingtimes. Thesuggestedsystem[20]ensuresthatbyadaptingthegreensignal
+timingaccordingtothevolumeoftrafficatthelight,thedirectionwithmoretrafficobtains
+agreensignalforalongeramountoftimethanthewaywithlesstraffic. Asaresult,there
+werefewerunwelcomedelays,lesstraffic,andlesswaitingtime,allofwhichwouldresult
+in less fuel use and pollution. A traffic light scheduling algorithm (ITLC) for isolated
+scenariosispresentedinthispaper[22]. Additionally,foropen-networksettings,anATL
+regulatingalgorithmwascreated. Vehicleadhoccommunicationstechnologyisusedby
+theITLCalgorithmtocollectreal-timetrafficinformationonallcompetingtrafficpatterns
+at every intersection with a signal [20]. Future studies will look at these traffic signalVehicles2023,5 1848
+schedulingalgorithms’faulttolerance,dependability,andpartialrelationshipwithvehicle
+problems[23].
+Thetopicofthisstudy[24]istheapplicationofedgecomputingandInternetofThings
+sensors to an optimal control method for emergency vehicle priority. Throughout this
+construction,emergencyvehicleswillalwaystakeprecedence,causingnodisruptionto
+normaltraffic. Thereal-world trialwith theEdge serverand DashboardUnit (DBU)is
+complete. Thereisaneedforanimprovementinthewaitingforvehicles. Inthisstudy[25],
+a suggestion for allocating emergency vehicles to traffic has been offered. The system
+combinesvehiclecounting,timelywarningtransmissionthroughthesensornetwork,and
+visualsensingmethodstogaugetheseparationbetweenintersectionsandtheemergency
+vehicle. Therangemeasurementinadverseweatherandbusytrafficconditionsneedsmore
+study. Themainobjectiveofthispaper’s[26]designistominimizetheamountoftimethat
+EVsmustwaitatthecrossingandtostopaccidentsthere,whichcanlowerthenumber
+offatalitiesandthedamageofpricelessproperty. Nodriverinteractionisnecessaryin
+thisinstanceforthesystemtodeliverrequestsfromSRMtotheRSU.ThankstoDSRC’s
+dependablecommunication,transmissionandreceptionhappensignificantlyfasterthan
+theywouldhaveusingtheGSMtechnique[15]. Adynamicwebormobileapplication
+interfacethatpermitsmoreintelligentautomaticandmanualcontrolofthesystemmaybe
+developedtoenhanceit[14].
+Inthisstudy[27],abasicCNNmodelwasputupandmeticulouslytrainedutilizing
+data augmentation techniques. The model’s performance in measuring traffic density
+was excellent. However, training the CNN for a new site takes a significant amount of
+computationalpowerandhumanlabor.Inthecurrentwork,auniquemethodforaccurately
+quantifyingtrafficdensityattheaggregatelevelfortrafficcontrolandmanagementwas
+demonstratedbythecountingofvehiclesonaroadsection. Thestrategywassuccessfulin
+accuratelycountingthenumberofvehicles.
+Themethodologyprovidedinthisresearchincludesthecalculationofdensityand
+prioritizationofintersectionswithsignificanttraffic. Inaddition,emergencyvehiclesare
+prioritizedusinga2D-CNNforvehiclecategorization. Theproposedmethodiscompared
+tooneoftheVANETmethodologiestoillustrateitsperformanceandcorrectness.
+3. ProposedMethodologyandModel
+Themethodofdeterminingtrafficdensityatatrafficintersectionbycountingcarsand
+modifyingtrafficsignaltiminginresponsetovehicledensityisillustratedusingthePygame
+tool. The goal of this approach is to manage the traffic by prioritizing lanes with more
+vehicles. Ambulancesaregivenpriorityforquickpassingatcrossingswhenapproaching
+thetrafficintersectionaftertheyareidentifiedusingthe2D-CNNvehiclecategorization.
+Thisstudy’sdevelopmenttakesthefollowingfactorsintoaccount:
+• Emergencyvehiclesentertheintersectionfrombothdirectionsatthesametime. In
+thiscase,thesuggestedsystemisdesignedinsuchawaythatitprioritizeslaneswith
+heavytraffic,andthereisnoemergencyvehiclepreemption,whichisaccomplished
+throughtheprogram;
+• Intersectionaccidents. Theproposedsystemlacksanaccidentdetectionmethodand
+insteadfocusesonvehicledensityandemergencyvehiclepreemption.Itwasdesigned
+withtheassumptionthatnoaccidentswouldeveroccurattheintersectionandthat
+trafficwouldflowfreely.
+Themethodologysectionisdividedintotwomajorsections: trafficdensityestimation
+and emergency vehicle preemption using the 2D-CNN. The simulation’s main method
+is traffic density estimation and prioritization, and vehicles are counted as they pass,
+approach,andpasstheintersection. Figure2showstheproposedsystemmodel.V ehicles 2023, V 5 V ,ee hF hii Occll Reess P22 E002E 233 R,, 5R 5, EFVOIRE WPE ER REVIEW 7 18479
+Figure 2. ThFeFi ipgguruorrpee o22s.. eTdTh hseey psprtreoomppo omsseeoddd sesyly.s stteemm mmooddeell..
+As shown AiAns sF s sih hgouo w wren n 3 i i,n n t hF Fei i g g eu umr r e ee 3r3g, , t et hnh eceye e m vm eee rhg rig ecln een c ypcyrve e veh emi h cpi l c etlie po nr p e r epe mreom pgt prioatmi n o p n ar cp otg rso r ta gom r ainm atce t ars crtut o sp i ttn o t e in rr t u er p r t u t p h t e
+the main ptrm hoega ri m nama p in,r oa p gnr rdo a g mwrh, a a menn, d aann w deh mw enehra egn ne ne a mcny e e vm rgeehe r nigccle yen vicsy e dh vei e cth leecictiel s edd i eas tpd epc ert t eoe d catce ahd pi np agr p o ptahr ceo h aiinc n htgeinrtsh gee cth-in e t e in rs te e r c s t e io c n -
+usingthe2D-CNN,thetrafficlightchangestogreenforafasterpassage.
+tion using tthioen 2 uDs-iCngN tNh,e t2hDe -tCraNffiNc, ltihghe tt rcahffiancg leigsh tot cghraenegne fso tro a g fraesetenr f poar sas afagset.e r passage.
+Figure 3. VeFh Fii igc g luu er r cee o 3u 3.. nVV te e ahh niicd cl let e rca coffi ouu cnn tv t ao anl n udd m ttre raa affif t fi ca c nvv oo inlluu temm rsee e ac att t iao ann n .i inntteerrsseeccttiioonn..Vehicles2023,5 1850
+3.1. TrafficDensityEstimationandPrioritization
+Thecreatedsystememploysvehicledetectiontodeterminethecurrenttrafficload
+using data generated from traffic junction simulation in Pygame. Each class of vehicle,
+includingcars,buses,trucks,andambulances,hasanumberthatiscountedtodetermine
+thetrafficload. Thegreensignaltimerisconfiguredbythesignal-switchingalgorithm
+usingthisloadandafewothervariables[28]. Additionally,emergencyvehiclesaregiven
+priorityattheintersectionusingthe2D-CNNforvehicleclassification. Toshowhowwell
+the system works and to contrast it with an existing adaptive traffic system built with
+SUMO,asimulationisproduced.
+Asignal-switchingalgorithmmodifiestheredsignaltimersofotherlightsandcor-
+rectlysetsthegreensignaltimerbasedonthetrafficdensitydataprovidedbythevehicle
+detectingmodule. Additionally,dependingontimings,italternatesbetweenthesignals.
+Thealgorithmreceivesdataabouttheautosthatthedetectionmodulehasidentified. The
+totalnumberofcarsisthendeterminedusingthisdata. Thedetectionmodelvalidates
+the output (0,1,2,3) of the 2D-CNN using images taken from Pygame via the webcam
+launchedbythetoolforthepurposeofemergencyvehiclepreemption. Oncethegreen
+signaltimehasbeenestablishedandallotted,theredsignaltimesoftheadditionalsignals
+aremodifiedasneeded. Anynumberofsignalsatajunctioncanbeaddedorloweredusing
+thistechnique. Followingthetrafficintensityassessmentalgorithm’sprocessingtime,the
+durationofthegreenlightistakenintoconsideration. Thenumberoflanesandtheoverall
+countofautomobilesineveryclassification,suchascars,ambulances,andtrucks,areused
+tocomputetrafficdensity(TD),asindicatedinEquation(1):
+∑AutomobileGroup(NoOfAutomobile )
+AutomobileGroup
+TrafficDensity(TD) = (1)
+(NoOfTrafficLanes+1)
+where:
+• TDisthetrafficdensitycalculatedusingthesimulation’scurrentloadofvehicles;
+• ThevehicledetectionmoduledeterminesthelengthofthestringNoOfAutomobile-
+Group,whichencodesthenumberofcarsfromeachclasspresentatthesignal;
+• Theintersection’slanecountisgivenbytheparameterNoOfTrafficLanes.
+Themethodsetsthedefaulttimeforthefirstsignalofthefirstcyclewhenitisfirst
+run,anditusestrafficdensity(TD)todeterminethetimingsofallsubsequentsignalsas
+wellasallothersignalsinthefirstcycle. Thecountdowntotheredlightofthenextgreen
+signalisapproachingfiveseconds,orthetimerforthegreensignalisapproachingfive
+seconds. Detectingvehiclestravelinginbothdirectionsistheresponsibilityofasecond
+thread,whilethemainthreadcontrolsthetimingofthecurrentsignal. Oncetheoutcome
+hasbeenprocessed,thenextgreensignaltimerisprogrammed. Theadjustedtrafficlight
+timershowninFigure3makesitpossibleforvehiclestomovethroughtheintersection
+fasterwhentheyareseenapproaching.
+3.2. EmergencyVehiclePreemptionUsinga2D-CNN
+Ambulances are given the ability to control traffic lights at crossings thanks to a
+practicecalledemergencyvehiclepreemption. Thisvehicleissupposedtocrossandhave
+priorityattheintersectionsfastandsecurely,eventhoughothervehiclesarestillsubjectto
+aredtrafficlight. Pygameisusedtodemonstratetheoperationofthetrafficlight’ssignal
+switchingandemergencyvehiclepreemptionsystemintheflowchartinFigure4:
+Theprocedurestartswhenanemergencyvehicleapproachesthetrafficlight. When
+anemergencyvehicleisdetectedusingthedetectionmodelandthe2D-CNNforvehicle
+classification,thecomputerextendsthegreenlighttoallowittosafelycrosstheintersection.
+AccordingtoTable2,everyvehiclehasa“type”allocatedtoitwiththeprogram(0—car,
+1—bus,2—truck,3—ambulance).Vehicles 2023, 5, FOR PEER REVIEW 9
+Vehicles2023,5 1851
+Figure4.DiagramforemergencyvehiclepreemptionandPygame-basedtrafficlightsignalswitching.
+Figure 4. Diagram for emergency vehicle preemption and Pygame-based traffic light signal switch-
+Table2.ThePygamesimulationengine’scategorizationofvehicles.
+ing.
+VehicleType VehicleGroups AverageSpeed
+The procedure starts when an emergency vehicle approaches the traffic light. When
+0 car 2.25m/s
+an emergency vehicle is detected using the detection model and the 2D-CNN for vehicle
+1 bus 1.8m/s
+classification, the compute2r extends the green light ttrou cakllow it to safely cross th1.e8 min/tesrsec-
+tion. According to Table 2,3 every vehicle has a “typame”b uallalnocceated to it with the pr2o.g5rma/ms (0—
+car, 1—bus, 2—truck, 3—ambulance).
+Based on the output of the 2D-CNN model displayed in Figure 5, the computer
+Table 2. The Pcyagnamreec osgimniuzleateiomne ernggeinncey’s vceahteigcloersizuastiionng otfh veevheichleicsl.e type that has been provided to it
+(3-ambulance)andadjustthetrafficsignalasnecessary. Thesystementersthe“GreenLight
+Vehicle Type Vehicle Groups Average Speed
+Extended”statewhenthegreenlighthasbeenprolonged,asseeninFigure4.
+Thec0o llectionofphotosofvariousvehciaclre s, includingcars,2tr.u25ck ms,/bs uses, andam-
+bulances,1is dividedintotrainingdatasetsabnudst estdatasets. Toens1u.8re mu/nsi formity,every
+imageiss2c aledtoafixedsizeandchangedttorugcrka yscaleforsimpler1p.r8o mce/sss ing. Asshown
+in Figure 5, the CNN model is fed different image labels as input (e.g., car label 0, bus
+3 ambulance 2.5 m/s
+label1,trucklabel2,andambulancelabel3),anditisthentrainedtolearnovertimeusing
+KerasandOpenCVaspartofthesupervisedlearningtechniqueThemodelwastrained
+Based on the output of the 2D-CNN model displayed in Figure 5, the computer can
+using100imageswith100epochs,andthedetectionalgorithmbuiltusingPygameuses
+recognize emergency vehicles using the vehicle type that has been provided to it (3-am-
+theoutputofeither0,1,2,or3fromthemodelafterithasbeencompiledtocontrolthe
+bulance) andtr aafdfijculsotg tihcea ntrdaeffixtce nsidgnthael taims eneocfetshseatrrya.f fiTchger eseynstleigmh te.nFtiegrusr eth5ed “isGprlaeyesnt hLeigChNt Nfor
+Extended” sptaictetu wrehceante tghoer igzraetieonn .light has been prolonged, as seen in Figure 4.Vehicles 2023, 5, FOR PEER REVIEW 10
+Vehicles2023,5 1852
+Figure5.Categorizationofvehiclesusinga2D-CNN.
+ImagesarecapturedfromPygamewiththefixedsizeandsavedas“.png”;then,the
+imagescapturedfromPygameareusedtotestthe2D-CNNmodelforreal-timecla ssifica-
+tion. TheprogramusestheoutputfromthetrainedCNNmodel(0,1,2,and3)asacondition
+Figure 5. Categorization of vehicles using a 2D-CNN.
+toeitherexternalizethegreenlightiftheoutputis(3—ambulance)foremergencyvehicle
+preemptionorchangeittorediftheoutputis(0—car,1—bus,and2—truck). Belowisthe
+The collection of photos of various vehicles, including cars, trucks, buses, and ambu-
+algorithmusedforvehicleclassificationusingtheCNNandKeras:
+lances, is divided into training datasets and test datasets. To ensure uniformity, every im-
+• ageI mis psocartlevda rtoio au sfipxeydth soiznel iabnrdar ciehsan(Tgeends otorF glorawy,sNcaulem fpoyr ,scivm2p);ler processing. As shown in
+• FigMuraek 5e, athfeo lCdNerNco mntoadineiln igs ftehde dlaibffeelrsefnotr itmheagtrea lianbinelgs aansd intpesutti n(ge.gd.a, tcaasre tlas;bel 0, bus label
+• 1, tDruivckid leatbheel f2e, aatundre samanbdullaabnecles lianbtoels 3e)t,s afonrdt eits tiisn gth,evna ltirdaaitnioedn, taon dleatrrani noivnegr; time using
+• KerParse paanrde OthpeeinmCaVge assb pyaarpt polfy tihneg seuffpecetrsvsisuecdh laesagrnrainygsc taelcehcnoinqvueer sTiohne, mimoadgeel awuagsm treanitnae-d
+tion,anddatasetnormalization;
+using 100 images with 100 epochs, and the detection algorithm built using Pygame uses
+• Makeanimagegeneratorsothatthereareenoughimagesavailableforuse;
+the output of either 0, 1, 2, or 3 from the model after it has been compiled to control the
+• Aconvolutionandamaxpoolinglayershouldbeadded,alongwithseveralhidden
+traffic logic and extend the time of the traffic green light. Figure 5 displays the CNN for
+layers. Dependingonthenumberoffeaturesrequired,flattenanddropout;
+picture categorization.
+• Forprocessoptimization,usetheReLUactivationfunctionandAdamoptimizer;
+Images are captured from Pygame with the fixed size and saved as “.png”; then, the
+• The accuracy score of the evaluation metric should be used to assess the neural
+images captured from Pygame are used to test the 2D-CNN model for real-time classifi-
+network’sperformance;
+cation. The program uses the output from the trained CNN model (0,1,2, and 3) as a con-
+• TheaccuracyscorewillindicatehowwelltheCNNmodeloperatesonthetestdataset.
+dition to either externalize the greenlight if the output is (3—ambulance) for emergency
+vehIinclFei gpurereem6,ptthioenfl oowr cchoannvgeer ista ttoio rnedu sief dthteo otruatipnutth ies 2(D0—-CcNarN, 1m—obduesl, iasnddis 2p—latyreudc.k). Be-
+lowT ihse theve aallugaotrioitnhmsc ourseedca fnorb evedheircilvee cdlausssiinfigcaEtiqouna utisoinng(2 t)h[e2 9C]N. N and Keras:
+• Import various python libraries (TensorFlow, Numpy, cv2);
+TP
+• Make a folder containing tShceo lraeb=els for the training and testing datasets; (2)
+TP+FP+FN
+• Divide the features and labels into sets for testing, validation, and training;
+wh • ere:Prepare the images by applying effects such as grayscale conversion, image augmen-
+• Tr t u a e ti p on os , i a t n iv d e d is at d a e s n e o t t n e o d rm by al T iz P a a ti n o d n; f alsepositiveisrepresentedbyFP;
+• • ThMeankuem anb eimr oagfev gehenicelreastothr asto wthearte thaecrceu raartee elynoduegtehc itmedagisesi navdaicilaatbelde fboyr ufasles;e nega-
+• tivAe c(FoNnv);olution and a max pooling layer should be added, along with several hidden
+layers. Depending on the number of features required, flatten and dropout;
+TheReLUisutilizedforactivation. Assumingxastheinputtotheneurons,theactiva-
+• For process optimization, use the ReLU activation function and Adam optimizer;
+tionfunctionindeepneuralnetworkscalculatestheoutput,asdepictedinEquation(3).
+• The accuracy score of the evaluation metric should be used to assess the neural net-
+work’s performance;
+f(x) = y =max(0, x) (3)Vehicles 2023, 5, FOR PEER REVIEW 11
+• The accuracy score will indicate how well the CNN model operates on the test da-
+Vehicles2023,5 taset. 1853
+In Figure 6, the flow conversation used to train the 2D-CNN model is displayed.
+Figure6.A2D-CNNmodel’strainingflowchart.
+Figure 6. A 2D-CNN model’s training flowchart.
+A2D-CNNmodelminimizesthemeanabsoluteerror(MAE)toforecasttrafficbetween
+Tthhee eesvtiamluaatetidonva slcuoeryeˆ caannd bteh edearcitvueadlv uasluinegy E.qTuhaetiloonss (2fu) n[2ct9i]o.n canbeobtainedusingthe
+n n
+formulagiveninEquation(4).
+TP
+Score= (2)
+T1P
+∑
++
+N
+FP+FN
+MAE = |y −yˆ | (4)
+where: N n=1 n n
+• True Apopsriteievme pist idoenntoimteedr bisy iTnPit iaantedd faaslsteh peogsrietievne liisg hretpisreesxetnetnedde dbyt oFPtr;a ck how long it
+• Trehme aniunsmobne.rT ohfe vsyehstiecmless wthitacth wesebraec akctcouirtastsetlayn ddaertdecgtreede nisl iignhdticcyactleeda bftyer ftahlesep rneeegmaptitvioen
+(pFeNri)o; disup,allowingotherdirectionstopassthroughtheintersection. Aftertheordinary
+trafficlightcycle,thesystemresumesregularfunctioninguntilthenextemergencyvehicle
+The ReLU is utilized for activation. Assuming x as the input to the neurons, the acti-
+isdetected. Throughoutthiswholeprocess,theprimarythreadismonitoringhowlongthe
+vation function in deep neural networks calculates the output, as depicted in Equation (3).
+currentgreensignalwilllast. Thealgorithmdeterminesthenextsignal,whichturnsgreen
+forthepredeterminedperiodw𝑓h(𝑥e)n t=he 𝑦g r=een mtiamx e(r0,o𝑥n)t hecurrentsignalhitszero. Ba(s3e)d
+onthepercentageofeachclassofvehiclesthatwerepresentatasignalandconsideringthe
+A 2D-CNN model minimizes the mean absolute error (MAE) to forecast traffic be-
+typicalbeginningspeeds,ambulancedetection,andaccelerationtimesofcars,theright
+tweeng rteheen essitginmaaltteimd evwalausec h𝑦(cid:3548)o(cid:3041)s eann.dT htheef oalclotuwailn vgasltuepe i𝑦s(cid:3041)t.o Tuhsee Eloqsusa ftuionnc(t5io)nto ccaanlc buela otebtthaeinteimd e
+usingu tnhteil ftohremtrualfafi gcilvigehnt itnu rEnqsugarteieonn. (4).
+∑AutomobileGroup(NoOfAuotmobile ∗AverageTme )
+AuotmobileGroup AutomobileGroup
+TGST= (5)
+(NoOfTrafficLanes+1)Vehicles 2023, 5, FOR PEER REVIEW 12
+𝑀𝐴𝐸 = (cid:2869) ∑(cid:3015) |𝑦 −𝑦(cid:3548) | (4)
+(cid:3015) (cid:3041)(cid:2880)(cid:2869) (cid:3041) (cid:3041)
+A preemption timer is initiated as the green light is extended to track how long it
+remains on. The system switches back to its standard green light cycle after the preemp-
+tion period is up, allowing other directions to pass through the intersection. After the or-
+dinary traffic light cycle, the system resumes regular functioning until the next emergency
+vehicle is detected. Throughout this whole process, the primary thread is monitoring how
+long the current green signal will last. The algorithm determines the next signal, which
+turns green for the predetermined period when the green timer on the current signal hits
+zero. Based on the percentage of each class of vehicles that were present at a signal and
+considering the typical beginning speeds, ambulance detection, and acceleration times of
+cars, the right green signal time was chosen. The following step is to use Equation (5) to
+calculate the time until the traffic light turns green.
+Vehicles2023,5
+TGST=
+∑(cid:2885)(cid:2931)(cid:2930)(cid:2925)(cid:2923)(cid:2925)(cid:2912)(cid:2919)(cid:2922)(cid:2915)(cid:2891)(cid:2928)(cid:2925)(cid:2931)(cid:2926) ((cid:2898)(cid:2925)(cid:2899)(cid:2916)(cid:2885)(cid:2931)(cid:2925)(cid:2930)(cid:2923)(cid:2925)(cid:2912)(cid:2919)(cid:2922)(cid:2915)(cid:3133)(cid:3179)(cid:3173)(cid:3178)(cid:3171)(cid:3173)(cid:3160)(cid:3167)(cid:3170)(cid:3163)(cid:3139)(cid:3176)(cid:3173)(cid:3179)(cid:3174)∗(cid:2885)(cid:2932)(cid:2915)(cid:2928)(cid:2911)(cid:2917)(cid:2915)(cid:2904)(cid:2923)(cid:2915)(cid:3133)(cid:3179)(cid:3178)(cid:3173)(cid:3171)(cid:3173)(cid:3160)(cid:3167)(cid:3170)(cid:3163)(cid:3139)(cid:3176)(cid:3173)(cid:3179)(cid:3174)) 1
+(
+8
+5
+5
+)
+4
+((cid:2898)(cid:2925)(cid:2899)(cid:2916)(cid:2904)(cid:2928)(cid:2911)(cid:2916)(cid:976)(cid:2919)(cid:2913)(cid:2896)(cid:2911)(cid:2924)(cid:2915)(cid:2929) (cid:2878) (cid:2869))
+The average time it takes each vehicle class to cross a junction is estimated,
+wherTe:h eaveragetimeittakeseachvehicleclasstocrossajunctionisestimated,where:
+•• TTGGSSTT iiss tthhee ttrraaffifficc ssiiggnnaall ttiimmee ffoorr tthhee ggrreeeenn lliigghhtt;;
+•• TThhee ssttrriinngg nnuummbbeerr ooff aauuttoommoobbiillee ggrroouupp eennccooddeess,, aass ddeecciiddeedd bbyy tthhee vveehhiiccllee ddeetteeccttiioonn
+mmoodduullee,, tthhee qquuaannttiittyy ooff eeaacchh kkiinndd ooff vveehhiiccllee aatt tthhee ssiiggnnaall;;
+•• AAvveerraaggee ttiimmee mmeeaassuurreess tthhee ttyyppiiccaall aammoouunntt ooff ttiimmee tthhaatt iitt ttaakkeess aa vveehhiiccllee iinn tthhaatt ggrroouupp
+ttoo ccrroossss aann iinntteerrsseeccttiioonn;;
+•• TThhee iinntteerrsseeccttiioonn’’ss llaannee ccoonnfifigguurraattiioonn iiss tthhee nnuummbbeerr ooff llaanneess..
+TThhee ttyyppiiccaall aammoouunntt ooff ttiimmee nneeeeddeedd ffoorr eeaacchh kkiinndd ooff vveehhiiccllee ttoo ccrroossss aa jjuunnccttiioonn vvaarriieess
+ddeeppeennddiinngg oonn iinntteerrsseeccttiioonn cchhaarraacctteerriissttiiccss aanndd vveehhiiccllee ttyyppeess,, lliikkee eemmeerrggeennccyy vveehhiicclleess.. TThhee
+ssiiggnnaallss aarree rreeppeeaatteeddllyy sswwaappppeedd bbeettwweeeenn tthhee llaanneess wwiitthh tthhee hhiigghheesstt aanndd lloowweesstt ddeennssiittiieess..
+TThhee yyeellllooww ssiiggnnaallss hhaavvee bbeeeenn ttaakkeenn iinnttoo ccoonnssiiddeerraattiioonn,, aass wweellll aass tthhee pprreesseenntt ssiiggnnaall ccoonn--
+fifigguurraattiioonn.. TThhee ssiiggnnaallss aarree sshhoowwnn iinn tthhee ffoolllloowwiinngg oorrddeerr:: rreedd, ,ggrreeeenn, ,yyeellloloww,, aanndd tthheenn rreedd..
+FFiigguurree 77 bbeellooww ddeemmoonnssttrraattee tthhee aallggoorriitthhmm ooff tthhee pprrooggrraamm..
+FFiigguurree 77.. AAllggoorriitthhmm ooff tthhee ssiimmuullaatteedd pprrooggrraamm..
+Afterthesimulation,thefollowingequationcanbeusedtocalculatethevehicletime
+waiting(VT )andvehicletimelost(VT ). Thetimedelay(T )isthelengthoftimethata
+w L D
+trafficsignalwasgreenandnovehicles—includingcars,lorries,buses,andambulances—
+passedthroughajunction. Equation(6)canbeusedtocalculatetheaveragelosttimeT
+L
+foreachtypeofvehicleattheintersection,includingcars,trucks,buses,andambulances.
+T
+VT = D (6)
+L
+N
+where:
+• Totaldelay(T )isthetotalofallcardelaysoveracertainperiodmeasuredinseconds;
+D
+• Total number of vehicles (N) is the entire count of automobiles that traversed the
+junctionorsegmentofroadduringthesameduration.
+Vehiclequeuelength(VQ )referstotheperiodthatcars,trucks,buses,andambu-
+L
+lancestakeatthecrossroadwhileawaitingthegreenlight. ThetypicalwaittimeVT is
+wVehicles2023,5 1855
+derivedbydividingthevehiclesqueuelengthasstatedinEquation(7)bytheflowrateof
+thecars,trucks,buses,andambulancesminusthedeparturerate.
+VQ
+VT = L (7)
+w
+N
+where:
+• Vehiclequeuelength(VQ )isthenumberofcarsinthelineatanymoment;
+L
+• Nisthetotalnumberofvehiclesintheentiresimulation.
+Every car logs its location, speed, amount of waiting time, and starting time. The
+simulation loop updates all vehicles, renders the current state, verifies simulation end
+conditions,andextendssimulationtime. Itcomputesandaddsthelosttimeandqueue
+length for each vehicle when it arrives at a destination or meets certain criteria. The
+averagelosttimeandaveragequeuelengtharedeterminedbydividingthetotallosttime
+andtotalqueuelengthbythetotalnumberofvehiclesthathavecompletedtheirjourney.
+Thepseudo-codefor calculatingaveragelosttime andvehiclequeuelength withinthe
+simulatedprogramisshownbyAlgorithm1below.
+Algorithm1Vehicledelay
+Totalvehicles=0
+Totallosstime=0
+Totalqueuelength=0
+classAutomobile:location
+waiting_time,speed,andwaiting_start_time
+functionupdate():
+Ifposition=waiting_location,then
+waiting_start_time=current_timeifwaiting_start_timeisnull.
+otherwise:
+ifwaiting_start_timeisnotnull:
+wait
+vehiclemovementbasedonspeed
+startupthecars
+Setupthesimulation’sparameters.
+Asthesimulationisrunning,foreveryvehicleinthevehicles:
+vehicle.update()
+displaythestateofthesimulation
+thecheck_simulation_end_conditionfunction
+Ifsomevehiclehasfinished,then:
+totalvehicles+=1
+totallosttime+=calculate
+losttimeforcompletedvehicle()
+totalqueuelength+=calculatequeuelengthforcompletedvehicle()
+advancetimeforsimulation
+Totallosttime/totalvehiclesequalsaveragelosttime.
+Totalqueuelength/totalvehiclesequalsaveragequeuelength.
+Vehiclecountandlaneprioritytrafficareregulatedusingatrafficlightcontrolsystem
+signalandgaugedensityandgiveprioritytolaneswithmorevehiclesbydetectingand
+counting the vehicles as they pass through the intersection. In Pygame, vehicles are
+generatedrandomlyatpredeterminedintervalsoftime.
+4. Simulation,ExperimentalData,andResultsAnalyses
+Trafficsimulation’sconstituentpartsaretheirinfrastructureandthetrafficthatuses
+it. Whiletrafficismadeupofvehicles,suchastrucks,buses,pedestrians,bicycles,pas-
+sengercars,trains,andtrams,infrastructurecomponentsincludestreets,trafficsignals,
+railroadlines,inductionloopdetectors,etc. Manymetrics,includingqueuelength,sys-Vehicles 2023, 5, FOR PEER REVIEW 14
+total queue length += calculate queue length for completed vehicle()
+advance time for simulation
+Total lost time/total vehicles equals average lost time.
+Total queue length/total vehicles equals average queue length.
+Vehicle count and lane priority traffic are regulated using a traffic light control system
+signal and gauge density and give priority to lanes with more vehicles by detecting and
+counting the vehicles as they pass through the intersection. In Pygame, vehicles are gen-
+erated randomly at predetermined intervals of time.
+4. Simulation, Experimental Data, and Results Analyses
+Traffic simulation’s constituent parts are their infrastructure and the traffic that uses
+it. While traffic is made up of vehicles, such as trucks, buses, pedestrians, bicycles, pas-
+Vehicles2023,5 senger cars, trains, and trams, infrastructure components include streets, traffic1 8s5i6gnals,
+railroad lines, induction loop detectors, etc. Many metrics, including queue length, system
+throughput, travel time, delay, etc., are commonly used to assess the effectiveness of traffic
+temthroughput,traveltime,delay,etc.,arecommonlyusedtoassesstheeffectivenessof
+systems.
+trafficsystems.
+4.1. Simulation Tools
+4.1. SimulationTools
+AlAl ltlhteh esismimuullaattiioonnss aarreee exexceuctuetdeuds iunsginthge tAhne aAconnadcaoNndavai gNaatovrigtoaotlocra ltloeodlS cpayldleedr. STopyder.
+Tot thhoorroouugghhlylyc ocmompapraerteh ethoeu otcuotmcoemsoefs tohfe tthweo twsyos tseymstse,mtesn, stiemnu sliamtiuonlastioofnbso othf badoathp taivdeaptive
+sysstyesmtesm, se,aecahc hlalsatsitningg fifivvee mmiinnuutteess,,w weererer urnunsi dsiedbey bsyid sei,daes, sahso swhnoiwnnF iignu Freig8u. re 8.
+Figure 8. SUMO and Pygame simulation platforms.
+Figure8.SUMOandPygamesimulationplatforms.
+A Asimsimulualtaitoionn ooff aaccttuuaall ttrraaffifficcw wasacsr ceareteadteuds iungsiPnygg Pamygea.mItfea.c Iitli tfaatceislistyastteesm syvsistueamli zvai-suali-
+zattiioonn aannddc coommpparaisroisnown iwthiathn aexni setxinisgtsintagti cstsaytsitce msy.sPteymga.m Peyigsaamcoel liesc ati ocnololfeccrtoiossn- polfa tcfroorsms-plat-
+Pythonutilitiesforgamedevelopment. Pygameisincrediblyportable,runningonnearly
+form Python utilities for game development. Pygame is incredibly portable, running on
+everyplatformandoperatingsystem. IthasanLGPLlicenseandisfreetouse[30]. The
+nearly every platform and operating system. It has an LGPL license and is free to use [30].
+traffic simulation of the proposed model using Pygame was simulated on the Ubuntu
+The traffic simulation of the proposed model using Pygame was simulated on the Ubuntu
+platform. Thesuggestedmethodaimstoutilizetheresourcesfortimeallocationandtraffic
+platform. The suggested method aims to utilize the resources for time allocation and traf-
+managementaseffectivelyaspossible. Nomatterhowmanyvehiclesarepresent,every
+fic management as effectively as possible. No matter how many vehicles are present, every
+vehicle must pass over the crossing [30]. Consequently, navigating through traffic will
+vehaliwclaey msruesqtu ipreasths eolveeasrt tahme ocurnotsosifntigm [e3.0I]n. SCUoMnsOe,qvueehnictlleys, anraevraignadtoinmgl ythgeroneurgahte dtraanffidc will
+alwloaaydse rdeiqnutoirteh tehnee ltewaosrt kamatoaurnant doof mtimspee. eIdn. SInUMordOe,r vtoehdircalemsa atircea lrlaynrdedoumcleyi ngdeinveidrautaeld and
+loawdaeidti nignttoim tehse, tnheetmweothrkod aste ae krsatnodsochmed supleeecdar.s Iant aorjudnecrt itoon dbryacmalacutilcaatilnlyg trheednuucme binerdoivfidual
+vehiclesoneachroadandspreadingthistrafficusingavarietyofcriteria[30]. Vehicledata
+fordeparture,duration,etc.,arerecordedintheoutput.xmlfileduringsimulation.
+4.2. ExperimentalData
+ThevehicletestimagesfromthePygamesimulationwereusedtotrainthemodel,
+anditachieveda96%accuracyrateinpredictingthetypeofvehicle. Table3belowshows
+alltheparametersusedbythe2D-CNNduringtrainingtoachieveahighaccuracyrate.Vehicles2023,5 1857
+Table3.Architecturedetailsofthe2DConvolutionalNeuralNetwork.
+Number ArchitectureDetails
+1 Inputimagesize(640,480)
+Totalnumberoflayers:2
+TotalMaxPooling2Dlayersused:2
+2 Totalfullyconnectedlayersused:3
+Activationlayers:4
+Dropoutlayer:2
+3 KernalsizeateachConv2Dlayer:3×3
+4 PoolsizeateachmaxPooling2Dlayer:(2,2)
+5 Outputclasslabels:3
+Table4showstheoutputofthe2D-CNNmoduleduringtrainingforvehicleclassifica-
+tion,accuracy,andtimeloss.
+Table4.The2D-CCNaccuracyandlosswithepoch.
+Epoch TimeTaken(s) Accuracy Loss
+1 11 0.478 1.998
+2 9 0.800 0.678
+3 10 0.877 0.423
+4 11 0.906 0.312
+5 11 0.921 0.273
+6 10 0.923 0.255
+7 11 0.935 0.232
+8 12 0.936 0.228
+9 11 0.938 0.233
+10 9 0.939 0.214
+11 11 0.944 0.211
+12 11 0.947 0.206
+13 9 0.945 0.216
+14 11 0.951 0.201
+15 10 0.953 0.186
+Vehicles 2023, 5, FOR PEER REVIEW The accuracy and time loss during the training of the labeled dataset is shown in16
+Figure9.
+2.5
+2
+1.5
+1
+0.5
+0
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Accuracy Loss
+FFiigguurree9 9.. CCoommppaarriissoonn ooff tthhee ttiimmee lloossssa anndda accccuurraaccyyf foorrt thheet trraaiinneeddd daattaasseett..
+4.3. Simulation Results and Analysis
+The suggested adaptive traffic light control system built with Pygame and the adap-
+tive traffic signal system built with SUMO were both evaluated in a real-time setting with
+the same amount of time (300 s). In this research, average vehicle throughput was com-
+pared with a system built using SUMO. Ten simulations of both adaptive systems, each
+lasting 5 min, were run side by side to comprehensively compare the results of the two
+systems. A performance indicator was the number of cars that could cross the intersection
+in a certain period. This has an impact on both the length of other signal waits, as well as
+vehicle wait times. Multiple vehicles passing in opposite directions and the total number
+of passing vehicles were used to tabulate the data.
+(a) Simulation using SUMO.
+Figure 10 shows random vehicles generated using SUMO after 300 s for lane priority
+using the adaptive traffic light control module.
+Figure 10. Simulation of an adaptive traffic intersection using SUMO.
+After 300 s, the printed output shows both the total number of vehicles loaded in the
+simulation passing through the junction and the vehicle speeds for each vehicle class.
+Since traffic density varies depending on the time of day (morning, during the day, in the
+afternoons or evenings), the data above for an adaptive traffic signal can reflect aVehicles 2023, 5, FOR PEER REVIEW 16
+2.5
+2
+1.5
+1
+0.5
+0
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Vehicles2023,5 Accuracy Loss 1858
+Figure 9. Comparison of the time loss and accuracy for the trained dataset.
+4.3. SimulationResultsandAnalysis
+4.3. Simulation Results and Analysis
+ThesuggestedadaptivetrafficlightcontrolsystembuiltwithPygameandtheadaptive
+trafficTshige nsaulgsgyesstteemd abduailpttwivieth trSaUffiMc Oligwhte creonbtortohl seyvsatleumat ebduiilnt wairteha lP-tyigmaemsee tatnindg twheit ahdtahpe-
+staivmee traamffiocu snigtnoaflt ismysete(3m0 0bsu)i.ltI nwtihthis SrUesMeaOrc wh,earev ebroatghe evveahluicalteedth irno ua grheaplu-ttimwea ssecttomingp awreitdh
+wthiteh saamsyes taemmobuunitl touf stiinmge S(U30M0 Os).. TIenn thsiims ruelsaetaiorcnhs, oafvbeorathgea dvaephticivlee tshyrsoteumghsp,euat cwhalas sctoinmg-
+5pmariend, wweirthe rau snyssitdeemb ybusiildte utsoincgo mSUprMehOe.n Tsievne lsyimcoumlaptiaornest hoef rbeosuthlt sadoafpthtievtew soysstyesmtesm, esa.cAh
+plaesrftoinrgm 5a nmceinin, dwiecraeto rruwn assidthee bnyu smidbee rtoo fcocamrsptrhehatencosuivledlycr coosmstphaerien ttehres ercetsiuolntsi nofa tcheer ttawino
+pseyrsitoedm.sT. hAis phearsfoarnmiamnpcea citnodnicbatootrh wthaes ltehneg nthumofboetrh oefr csaigrsn tahlawt aciotus,ldas cwroeslsl tahsev ienhteicrlseecwtiaoint
+tiinm ae sc.erMtauinlt ippeleriovdeh. Tichleiss hpaass sainn giminpaocpt poons ibtoetdhi rthecet iloenngstahn odf tohtehetro tsaiglnnaulm wbaeirtso, fasp awsesliln ags
+vveehhiiccllees wwaeirte tiumseeds. tMotualbtiupllaet evethheicdleast ap.assing in opposite directions and the total number
+of passing vehicles were used to tabulate the data.
+(a) SimulationusingSUMO
+(a) Simulation using SUMO.
+Figure10showsrandomvehiclesgeneratedusingSUMOafter300sforlanepriority
+Figure 10 shows random vehicles generated using SUMO after 300 s for lane priority
+usingtheadaptivetrafficlightcontrolmodule.
+using the adaptive traffic light control module.
+FFiigguurree1 100.. SSiimmuullaattiioonn ooffa anna addaappttiivveet trraafffificci inntteerrsseeccttiioonnu ussiinnggS SUUMMOO..
+AAfftteerr 330000 ss,, tthhee pprriinntteedd oouutptpuut tshshoowws sbobtoht hthteh etottoatla nlunmubmebr eorf ovfehviechleicsl leosaldoeadd eind tihne
+tshiemsuimlatuiolant iopnaspsainsgsi nthgrtohurgohu gthheth jeunjucnticotnio nanadn dthteh evvehehicilcel essppeeeedds sffoorr eeaacchh vveehhiiccllee ccllaassss..
+SSiinnccee ttrraafffificc ddeennssiittyy vvaarriieess ddeeppeennddiinngg oonn tthhee ttiimmee ooff ddaayy ((mmoorrnniinngg,, dduurriinngg tthhee ddaayy,,i inn tthhee
+aafftteerrnnoooonnsso roerv eenveinngins)g,st)h, etdhaet adaabtoav eabfoorvaen faodr aapnti vaedtarapftfiivces igtrnaaffilcca nsirgenflaelc tcaansi mreufllaetcito na
+ofreal-worldtraffic. Anotherexampleofhowanadaptivetrafficsignalmightincrease
+vehiclethroughputatatrafficintersectionandsavebothdrivers’andpassengers’timeis
+showninTable5.
+Table5.ResultsfortheadaptivetrafficlightusingSUMO.
+Number Direction1 Direction2 Direction3 Direction4 Total
+1 48 46 43 57 194
+2 43 43 51 45 182
+3 44 51 45 50 190
+4 52 50 55 37 194
+5 43 47 51 44 185
+6 50 54 38 50 192
+7 54 61 38 35 188
+8 42 48 55 51 196
+9 48 41 51 43 183
+10 53 49 43 41 186Vehicles 2023, 5, FOR PEER REVIEW 17
+simulation of real-world traffic. Another example of how an adaptive traffic signal might
+increase vehicle throughput at a traffic intersection and save both drivers’ and passengers’
+time is shown in Table 5.
+Table 5. Results for the adaptive traffic light using SUMO.
+Number Direction 1 Direction 2 Direction 3 Direction 4 Total
+1 48 46 43 57 194
+2 43 43 51 45 182
+3 44 51 45 50 190
+4 52 50 55 37 194
+5 43 47 51 44 185
+6 50 54 38 50 192
+7 54 61 38 35 188
+Vehicles2023,5 8 42 48 55 51 196 1859
+9 48 41 51 43 183
+10 53 49 43 41 186
+(b) SimulationusingPygame
+(b) Simulation using Pygame.
+VVaarrioiouusst teesstts simimuulalattioionnssw weerreeu usseeddt toot teesstta av veehhiicclleed deetteeccttiioonnm moodduullee,,i inncclluuddiinnggo onneess
+wwhheerreet htheen nuummbbeerro offr arannddoommlylyg geenneerarateteddv veehhiciclelessp paassssininggt htheei nintetersresecctitoionnv vaarireiedd.. TThhee
+aallggoorriitthhmmc caannd deetteecctta annddc coouunnttv veehhiciclelessc crroossssininggt htheei ninteterrsseecctitoionn..B Bootthhs simimuulalattiioonnssw weerree
+run,andthetotalnumberofvehiclesgoingthroughtheintersectioninalldirections,as
+run, and the total number of vehicles going through the intersection in all directions, as
+wellasthenumberofvehiclestravelingineachdirection,werecounted. Figure11showsa
+well as the number of vehicles traveling in each direction, were counted. Figure 11 shows
+lanepriorityadaptivetrafficlightthatwascapturedafter300s.
+a lane priority adaptive traffic light that was captured after 300 s.
+FFiigguurree1 111..T Thhees siimmuulalattioionno offt thhees suuggggeesstteedds syysstetemm..
+TThheep prriinntteeddo ouuttppuutta afftteerr3 30000s sd diissppllaayysst thheeo ovveerraalllln nuummbbeerro offv veehhiicclleessg gooiinnggt thhrroouugghh
+Vehicles 2023, 5, FOR PEER REVIEW tthhee jjuunnccttiioonn,, aass wweellll aass tthhee nnuummbbeerr oof fvvehehicilcelse strtarvaevleinlign gthtrhoruoguhg htheth jeunjuctnicotnio inn ienaceha cd1hi8-
+driercetcitoino,n a,sa sshsohwownn inin FiFgiugurer e121.2 .
+FFiigguurree 1122.. VVeehhiiccllee tthhrroouugghhppuutta annddd dirireeccttioionnf foorrt htheep prrooppoosseedda addaapptitviveet rtraaffifficcl ilgighht.t.
+TThhee aabboovvee ddaattaa ffoorr aann aaddaappttiivvee ttrraafffificc lliigghhtt ccaann rreeflfleecctt rreeaall--lliiffee ttrraafffificc ssiimmuullaattiioonn ssiinnccee
+ttrraafffificc ddeennssiittyy vvaarriieess ddeeppeennddiinngg oonn tthhee ttiimmee ooff tthhee ddaayy ((mmoorrnniinngg,, dduurriinngg tthhee ddaayy,, aanndd iinn
+tthhee aafftteerrnnoooonnss oorr eevveenniinnggss)).. TTaabbllee 66 aallssoo rreeflfleeccttss hhooww aann aaddaappttiivvee ttrraafffificc lliigghhtt ccaann pprroovviiddee
+mmoorree tthhrroouugghhppuutt ooff vveehhiicclleess aatt tthhee ttrraafffificc iinntteerrsseeccttiioonn aanndd ssaavvee ttiimmee ffoorr tthhee ddrriivveerrss aanndd
+ppaasssseennggeerrss..
+Table 6. Results of the proposed adaptive system simulation.
+Number Direction 1 Direction 2 Direction 3 Direction 4 Total
+1 55 57 42 43 197
+2 43 43 57 45 188
+3 49 51 45 55 200
+4 55 53 56 47 211
+5 43 47 51 48 189
+6 46 54 53 54 207
+7 44 61 40 33 178
+8 42 46 55 51 194
+9 48 41 51 44 184
+10 58 50 43 41 192
+(c) Results Analysis
+All 10 simulations with different traffic density, when comparing the results on the
+traffic throughput, shows that the suggested technique is more effective than the adaptive
+traffic light using SUMO. Emergency vehicles also spend less time at traffic intersections
+thanks to emergency vehicle detection in real time using the 2D-CNN model and time
+adjustment algorithm used in this system. The graph shows the two systemsʹ performance
+at each simulation using the data in Tables 5 and 6, which were generated during the sim-
+ulation of traffic lights using Pygame and SUMO, as shown in Figure 13.Vehicles2023,5 1860
+Table6.Resultsoftheproposedadaptivesystemsimulation.
+Number Direction1 Direction2 Direction3 Direction4 Total
+1 55 57 42 43 197
+2 43 43 57 45 188
+3 49 51 45 55 200
+4 55 53 56 47 211
+5 43 47 51 48 189
+6 46 54 53 54 207
+7 44 61 40 33 178
+8 42 46 55 51 194
+9 48 41 51 44 184
+10 58 50 43 41 192
+(c) ResultsAnalysis
+All10simulationswithdifferenttrafficdensity,whencomparingtheresultsonthe
+trafficthroughput,showsthatthesuggestedtechniqueismoreeffectivethantheadaptive
+trafficlightusingSUMO.Emergencyvehiclesalsospendlesstimeattrafficintersections
+thanks to emergency vehicle detection in real time using the 2D-CNN model and time
+adjustmentalgorithmusedinthissystem. Thegraphshowsthetwosystems’performance
+Vehicles 2023, 5, FOR PEER REVIEWa t each simulation using the data in Tables 5 and 6, which were generated during the19
+simulationoftrafficlightsusingPygameandSUMO,asshowninFigure13.
+220
+210
+200
+190
+180
+170
+160
+1 2 3 4 5 6 7 8 9 10
+SUMO Pygame
+FFigiguurree1 133..C Coorrrreelalatitoionno offa addaapptitviveet rtraaffifficcs syysstetemmss..
+RReeggaarrddlelesssso offt htheed idsitsrtibriubtuiotino,nt,h tehper porpoopseodseadd aadptaipvteivsye sstyesmteomu topuetrpfoerrmfosrmthse tahdea apdtiavpe-
+ttriavfefi ctraliffighct lisgyhstt esmystienmS UinM SUOMalOm aolsmtoevste eryvetriym teim. Te.h Tehael laolcloactiaotnioonv oevrear lallflo fuourrl alanneessw waass
+sseett ttoo rraannddoomm iinn ththeessee scsecnenarairoiso.s T.hTish iiss ai scoamcmomonm toynpet yopf etraoffif tcr adfifistcridbiusttrioibnu itni orneailn-wroeralld-
+wsiotruladtisoitnusa. tEiomnes.rgEemnecyrg veenhcyiclveesh hicalvees ha ahviegha hthigrohutghhropuugt hapt uthtea tinthteerisnetcetriosenc tuiosinngu stihneg pthroe-
+pproospeods emdomdeold. el.
+5. Conclusions
+5. Conclusions
+Theproposedmethodensuresthatthedirectionwiththemosttrafficreceivesalonger
+The proposed method ensures that the direction with the most traffic receives a
+greensignalthanthedirectionwiththeleasttrafficbyadjustingthelengthofthesignal
+longer green signal than the direction with the least traffic by adjusting the length of the
+basedonthevolumeoftrafficatthelight. Asaresult,theproposedsystemdesigncleared
+signal based on the volume of traffic at the light. As a result, the proposed system design
+vehicles90%fasterthantheadaptivetrafficlightsystemusingSUMO.Thiswillreduce
+cleared vehicles 90% faster than the adaptive traffic light system using SUMO. This will
+gasolineconsumptionandemissionsbyeliminatingundesireddelays, congestion, and
+reduce gasoline consumption and emissions by eliminating undesired delays, congestion,
+waitingtimes. Additionally,theproposedmodelcanrecognizeemergencycarsandmodify
+and waiting times. Additionally, the proposed model can recognize emergency cars and
+thesignaltimersforquickerpassageoftheemergencyvehicles.Usingthe2D-CNNmodule,
+modify the signal timers for quicker passage of the emergency vehicles. Using the 2D-
+emergenciescanbeclassifiedandgivenpriorityattheintersection. Thehardwaredesign
+CNN module, emergencies can be classified and given priority at the intersection. The
+for this project has been saved for future use. The initiative could be expanded in the
+hardware design for this project has been saved for future use. The initiative could be
+expanded in the future to improve traffic management and reduce congestion. The detec-
+tion of accidents or malfunctions is a feature that can be added to improve the project.
+Because a variety of risky situations, such as angle and left-turn crashes, occur frequently
+at intersections, they are more likely to result in catastrophic accidents. To save lives and
+damage, as well as reduce traffic and delays, it is crucial to detect accidents accurately and
+quickly at junctions. This can be performed by filtering out parked cars and identifying
+cars that are stopped for an extended amount of time in an uncomfortable place, like the
+middle of the road. Additionally, vehicles that break traffic laws can be found. Setting a
+violation line and taking a snapshot when it is crossed while the signal is red may allow
+for the detection of cars that are running red lights in an image or video feed. Techniques
+for image processing can help with this. Syncing traffic lights at different crossings will
+benefit commuters since once a car enters the roadway, there may be less pause, and emer-
+gency vehicles can be detected at any point in time to be given priority, not only when
+they approach the traffic intersection. Also, if emergency vehicles arrive from all direc-
+tions, the system can be improved to handle situations in which an algorithm calculates
+the arrival time and urgency of each emergency vehicle and allows that particular emer-
+gency vehicle to go first.
+Author Contributions: M.J.M.: conceptualization, data analysis, investigation, writing, and experi-
+ments; C.T.; P.A. and M.N.: supervising, reviewing, and editing. All authors have read and agreed
+to the published version of the manuscript.
+Funding: The Tshwane University of Technology funded this study.Vehicles2023,5 1861
+futuretoimprovetrafficmanagementandreducecongestion. Thedetectionofaccidentsor
+malfunctionsisafeaturethatcanbeaddedtoimprovetheproject. Becauseavarietyof
+riskysituations,suchasangleandleft-turncrashes,occurfrequentlyatintersections,they
+aremorelikelytoresultincatastrophicaccidents. Tosavelivesanddamage,aswellas
+reducetrafficanddelays,itiscrucialtodetectaccidentsaccuratelyandquicklyatjunctions.
+Thiscanbeperformedbyfilteringoutparkedcarsandidentifyingcarsthatarestopped
+foranextendedamountoftimeinanuncomfortableplace, likethemiddleoftheroad.
+Additionally, vehicles that break traffic laws can be found. Setting a violation line and
+takingasnapshotwhenitiscrossedwhilethesignalisredmayallowforthedetectionof
+carsthatarerunningredlightsinanimageorvideofeed. Techniquesforimageprocessing
+can help with this. Syncing traffic lights at different crossings will benefit commuters
+sinceonceacarenterstheroadway,theremaybelesspause,andemergencyvehiclescan
+be detected at any point in time to be given priority, not only when they approach the
+trafficintersection. Also,ifemergencyvehiclesarrivefromalldirections,thesystemcan
+beimprovedtohandlesituationsinwhichanalgorithmcalculatesthearrivaltimeand
+urgencyofeachemergencyvehicleandallowsthatparticularemergencyvehicletogofirst.
+AuthorContributions:M.J.M.:conceptualization,dataanalysis,investigation,writing,andexperi-
+ments;C.T.;P.A.andM.N.:supervising,reviewing,andediting.Allauthorshavereadandagreedto
+thepublishedversionofthemanuscript.
+Funding:TheTshwaneUniversityofTechnologyfundedthisstudy.
+DataAvailabilityStatement:Dataarecontainedwithinthearticle.
+ConflictsofInterest:Theauthorsdeclarenoconflictofinterest.
+References
+1. Deepajothi,S.;Rajan,D.P.;Karthikeyan,P.;Velliangiri,S.Intelligenttrafficmanagementforemergencyvehiclesusingconvolu-
+tionalneuralnetwork.InProceedingsofthe20217thInternationalConferenceonAdvancedComputingandCommunication
+Systems(ICACCS),Coimbatore,India,19–20March2021;pp.853–857.
+2. Cristiani, A.L.; Immich, R.; Akabane, A.T.; Madeira, E.R.M.; Villas, L.A.; Meneguette, R.I. Atrip: Architecture for traffic
+classificationbasedonimageprocessing.Vehicles2020,2,303–317.[CrossRef]
+3. Mall,P.K.;Narayan,V.;Pramanik,S.;Srivastava,S.;Faiz,M.;Sriramulu,S.;Kumar,M.N.FuzzyNet-BasedModellingSmart
+TrafficSysteminSmartCitiesUsingDeepLearningModels. InHandbookofResearchonData-DrivenMathematicalModelingin
+SmartCities;IGIGlobal:Genval,Belgium,2023;pp.76–95.
+4. Zhou,B.;Cao,J.;Zeng,X.;Wu,H.Adaptivetrafficlightcontrolinwirelesssensornetwork-basedintelligenttransportation
+system.InProceedingsofthe2010IEEE72ndVehicularTechnologyConference-Fall,Ottawa,ON,Canada,6–9September2010;
+pp.1–5.
+5. Cano, M.-D.; Sanchez-Iborra, R.; Freire-Viteri, B.; Garcia-Sanchez, A.-J.; Garcia-Sanchez, F.; Garcia-Haro, J. Aself-adaptive
+approachfortrafficlightscontrolinanurbannetwork.InProceedingsofthe201719thInternationalConferenceonTransparent
+OpticalNetworks(ICTON),Girona,Spain,2–6July2017;pp.1–4.
+6. Zavala,B.;Alférez,G.H.Proactivecontroloftrafficinsmartcities.InProceedingsoftheInternationalConferenceonArtificial
+Intelligence(ICAI),LasVegas,NV,USA,27–30July2015;p.604.
+7. Guerrero-Ibáñez,J.;Zeadally,S.;Contreras-Castillo,J.Sensortechnologiesforintelligenttransportationsystems.Sensors2018,18,
+1212.[CrossRef][PubMed]
+8. Ahmed,F.;Hawas,Y.Anintegratedreal-timetrafficsignalsystemfortransitsignalpriority,incidentdetectionandcongestion
+management.Transp.Res.PartCEmerg.Technol.2015,60,52–76.[CrossRef]
+9. Kareem,D.M.CoverageinWirelessSensorNetworks.Master’sThesis,ÇankayaUniversity,Çankaya,Turkey,2015.
+10. binCheMansor,M.A.H.;Kamal,N.A.M.;binBaharom,M.H.;binZainol,M.A.EmergencyVehicleTypeClassificationusing
+ConvolutionalNeuralNetwork.InProceedingsofthe2021IEEEInternationalConferenceonAutomaticControl&Intelligent
+Systems(I2CACIS),ShahAlam,Malaysia,26June2021;pp.126–129.
+11. Chen,L.;Li,S.;Bai,Q.;Yang,J.;Jiang,S.;Miao,Y.Reviewofimageclassificationalgorithmsbasedonconvolutionalneural
+networks.RemoteSens.2021,13,4712.[CrossRef]
+12. Survarachakan,S.;Pelanis,E.;Khan,Z.A.;Kumar,R.P.;Edwin,B.;Lindseth,F.Effectsofenhancementondeeplearningbased
+hepaticvesselsegmentation.Electronics2021,10,1165.[CrossRef]
+13. Rajasekar,T.;Mohanraj,P.;Abishek,R.;Haries,M.AdaptiveTrafficCongestionControlApproachwithEmergencyVehicleProto-
+col.InProceedingsofthe20238thInternationalConferenceonCommunicationandElectronicsSystems(ICCES),Coimbatore,
+India,1–3June2023;pp.613–620.Vehicles2023,5 1862
+14. Pamula, T. Road traffic conditions classification based on multilevel filtering of image content using convolutional neural
+networks.IEEEIntell.Transp.Syst.Mag.2018,10,11–21.[CrossRef]
+15. Li,Z.;Liu,F.;Yang,W.;Peng,S.;Zhou,J.Asurveyofconvolutionalneuralnetworks:Analysis,applications,andprospects.IEEE
+Trans.NeuralNetw.Learn.Syst.2021,33,6999–7019.[CrossRef][PubMed]
+16. Sun,X.;Lin,K.;Jiao,P.;Lu,H.Signaltimingoptimizationmodelbasedonbuspriority.Information2020,11,325.[CrossRef]
+17. Jia,X.;Sun,C.ResearchonIntelligentMonitoringTechnologyofTrafficFlowBasedonComputerVision.InProceedingsofthe
+2023IEEEInternationalConferenceonSensors,ElectronicsandComputerEngineering(ICSECE),Jinzhou,China,18–20August
+2023;pp.557–561.
+18. Yogheshwaran,M.;Praveenkumar,D.;Pravin,S.;Manikandan,P.;Saravanan,D.S.IoTbasedintelligenttrafficcontrolsystem.Int.
+J.Eng.Technol.Res.Manag.2020,4,59–63.
+19. Aggarwal,S.; Bali,R.S.Avehiculardynamicsbasedtechniqueforefficienttrafficmanagement. InProceedingsofthe2015
+InternationalConferenceonAdvancesinComputing,CommunicationsandInformatics(ICACCI),Kochi,India,10–13August
+2015;pp.2133–2138.
+20. Cheng,J.;Wu,W.;Cao,J.;Li,K.Fuzzygroup-basedintersectioncontrolviavehicularnetworksforsmarttransportations.IEEE
+Trans.Ind.Inform.2016,13,751–758.[CrossRef]
+21. Rashid,H.;Ashrafi,M.J.F.;Azizi,M.;Heydarinezhad,M.R.Intelligenttrafficlightcontrolbasedonclusteringusingvehicular
+ad-hocnetworks. InProceedingsofthe20157thConferenceonInformationandKnowledgeTechnology(IKT),Urmia,Iran,
+26–28May2015;pp.1–6.
+22. Younes,M.B.;Boukerche,A.Intelligenttrafficlightcontrollingalgorithmsusingvehicularnetworks.IEEETrans.Veh.Technol.
+2015,65,5887–5899.[CrossRef]
+23. Guo,Q.;Li,L.;Ban,X.J.Urbantrafficsignalcontrolwithconnectedandautomatedvehicles:Asurvey.Transp.Res.PartCEmerg.
+Technol.2019,101,313–334.[CrossRef]
+24. Rosayyan,P.;Paul,J.;Subramaniam,S.;Ganesan,S.I.Anoptimalcontrolstrategyforemergencyvehicleprioritysysteminsmart
+citiesusingedgecomputingandIOTsensors.Meas.Sens.2023,26,100697.[CrossRef]
+25. Nellore,K.;Hancke,G.P.Trafficmanagementforemergencyvehicleprioritybasedonvisualsensing. Sensors2016,16,1892.
+[CrossRef][PubMed]
+26. Kavitha,Y.;Satyanarayana,P.;Mirza,S.S.Sensorbasedtrafficsignalpre-emptionforemergencyvehiclesusingefficientshort-
+rangecommunicationnetwork.Meas.Sens.2023,28,100830.[CrossRef]
+27. Chung,J.;Kim,G.;Sohn,K.TransferabilityofaConvolutionalNeuralNetwork(CNN)toMeasureTrafficDensity.Electronics
+2021,10,1189.[CrossRef]
+28. Mandal,V.;Mussah,A.R.;Jin,P.;Adu-Gyamfi,Y.Artificialintelligence-enabledtrafficmonitoringsystem.Sustainability2020,12,
+9177.[CrossRef]
+29. Luo,H.;Yang,Y.;Tong,B.;Wu,F.;Fan,B.Trafficsignrecognitionusingamulti-taskconvolutionalneuralnetwork.IEEETrans.
+Intell.Transp.Syst.2017,19,1100–1111.[CrossRef]
+30. Li, Q.; Peng, Z.; Feng, L.; Duan, C.; Mo, W.; Zhou, B. ScenarioNet: Open-Source Platform for Large-Scale Traffic Scenario
+SimulationandModeling.arXiv2023,arXiv:2306.12241.
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s)andcontributor(s)andnotofMDPIand/ortheeditor(s).MDPIand/ortheeditor(s)disclaimresponsibilityforanyinjuryto
+peopleorpropertyresultingfromanyideas,methods,instructionsorproductsreferredtointhecontent.

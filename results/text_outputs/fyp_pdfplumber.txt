@@ -1,0 +1,2698 @@
+Final Year Project Report
+BS (COMPUTER SCIENCE/ SOFTWARE
+ENGINEERING)
+For
+Smart Traffic Signals with Helmet detection
+Submitted by
+Muhammad Yahya (52010)
+Muhammad Sajid (50146)
+Supervisor
+DR. Engr Lubna Aziz
+Coordinator
+DR. Atiya MasoodDECLARATION
+We hereby declare that this project, neither whole nor as a part has been copied out
+from any source. It is further declared that we have developed this project and
+accompanied report entirely based on our personal efforts. If any part of this project is
+proved to be copied out from any source or found to be reproduction of some other. We
+will stand by the consequences. No Portion of the work presented has been submitted
+of any application for any other degree or qualification of this or any other university
+or institute of learning.
+Muhammad Yahya Muhammad Sajid
+iiCERTIFICATE OF APPROVAL
+It is to certify that the final year project of BS(CS/SE) “Smart Traffic Signals with
+Helmet Detection” was developed by MUHAMMAD YAHYA (52010) and
+MUHAMMAD SAJID (50146) under the supervision of DR. ENGR LUBNA AZIZ,
+and that in her opinion; it is fully adequate, in scope and quality for the degree of
+Bachelors of Science in Computer Sciences/Software Engineering.
+--------------------------------------
+Supervisor
+---------------------------------------
+Examiner
+---------------------------------------
+Head of Department
+(Department of Computer Science/Software Engineering/AI)
+iiiExecutive Summary
+In urban environments, managing traffic efficiently is a major challenge, particularly at
+intersections with heavy vehicle flow. Conventional traffic signals operate on fixed
+timers, failing to adapt dynamically to real-time traffic conditions, leading to
+congestion and delays. Additionally, motorcyclists often violate safety regulations by
+not wearing helmets, increasing the risk of severe injuries in accidents.
+Our project, Smart Traffic Signals with Helmet Detection, introduces an intelligent
+traffic management system that integrates vehicle detection, helmet detection, and
+adaptive signal control. Using YOLOv8-based object detection models, the system
+identifies and classifies vehicles to optimize traffic signal timing based on real-time
+traffic density. Simultaneously, it detects motorcyclists without helmets, captures their
+images, and extracts number plate details for law enforcement actions. This solution
+enhances road safety, improves traffic flow, and ensures better compliance with helmet
+regulations.
+ivAcknowledgement
+All praise is to Almighty Allah who bestowed upon us a minute portion of His
+boundless knowledge by virtue of which we were able to accomplish this challenging
+task.
+We are greatly indebted to our project supervisor DR. Engr Lubna Aziz. Without her
+personal supervision, advice and valuable guidance, completion of this project would
+have been doubtful. We are deeply indebted to her for her encouragement and continual
+help during this work. And we are also thankful to our parents and family who have
+been a constant source of encouragement for us and brought us the values of honesty
+& hard work.
+vAbbreviations
+YOLO You Only Look Once
+AI Artificial Intelligence
+mAP Mean Average Precision
+IoU Intersection Over Union
+FPS Frames Per Second
+CNN Convolutional Neutral Network
+GPU Graphics Processing Unit
+API Application Programming Interface
+viTable of Contents
+Chapter-1 Project Introduction .............................................................................. 1
+1.1. Project Background: ....................................................................................... 1
+1.2. Motivation and Need: ..................................................................................... 1
+1.3. Aims and Objectives: ...................................................................................... 3
+1.4. Problem Solutions for Proposed System: ........................................................ 3
+1.5. Technology Transfer/Diffusion Approach: ..................................................... 5
+1.6. Relevance to Course Modules: ........................................................................ 6
+1.7. Structure of the Report:.................................................................................. 7
+Chapter- 2 Related System Analysis/ Literature Review ........................................ 10
+2.1. Review .......................................................................................................... 10
+2.1.1 Smart Control of Traffic Light System using Image Processing .............................. 10
+2.1.2 Smart controlling for traffic light time ....................................................................... 11
+2.1.3 Smart traffic lights switching and traffic density calculations using video
+processing .................................................................................................................................... 12
+2.1.4 Intelligent Traffic Management Systems .................................................................... 14
+2.1.5 Smart Control of Traffic Light System using Image Processing .............................. 16
+2.2. Comparison .................................................................................................. 18
+2.3. Key Benefits and Beneficiaries ...................................................................... 19
+2.4. Summary ...................................................................................................... 21
+Chapter- 3 Research Approach ............................................................................ 22
+3.1 Development and Research Methodology: .................................................... 22
+3.2 Justification .................................................................................................. 22
+3.3 Project Flow ................................................................................................. 24
+3.4 Key Milestones and Deliverables .................................................................. 25
+3.5 Gantt Chart .................................................................................................. 26
+3.6 Project Schedule ........................................................................................... 27
+3.7 Team Members Individual Tasks/ Work Division ......................................... 27
+Chapter- 4 Dataset Description and Features ....................................................... 28
+4.1 Literature Survey of Algorithms ................................................................... 29
+4.2 Parameters Settings ...................................................................................... 30
+4.3 Termination Condition ................................................................................. 30
+4.4 Performance Measures ................................................................................. 30
+4.5 Conclusion .................................................................................................... 31
+Chapter- 5 Use Case Diagram ............................................................................. 32
+Chapter- 6 High Level Architecture ..................................................................... 33
+Chapter- 7 Methodologies ................................................................................... 35
+vii7.1 Dataset Preparation and Preprocessing ........................................................ 36
+7.2 Feature Extraction and YOLO customization .............................................. 37
+7.3 Model Training and Testing ......................................................................... 37
+7.4 Algorithm Integration and Simulation .......................................................... 37
+Chapter- 8 Algorithm .......................................................................................... 38
+Chapter- 9 Data Design ....................................................................................... 41
+9.1 Data Sources and Structure .......................................................................... 41
+9.2 Data Storage ................................................................................................. 41
+9.3 Data Processing Pipeline ............................................................................... 41
+9.4 Dataset Evaluation and Benchmarking ......................................................... 42
+9.5 Model Evaluation and Validation Strategy ................................................... 43
+Chapter- 10 Implementation ................................................................................ 44
+10.1 Algorithm ..................................................................................................... 44
+10.2 External APIs ............................................................................................... 46
+Chapter- 11 Model Evaluation ............................................................................. 47
+Chapter- 12 Conclusion and Future Work ........................................................... 72
+References .......................................................................................................... 74
+APPENDICES .................................................................................................... 76
+APPENDIX A – SDG ................................................................................................ 76
+APPENDIX B – CCP ................................................................................................ 77
+APPENDIX C – CODE ............................................................................................. 78
+viiiList of Tables
+TABLE 1 RELATED SYSTEM ANALYSIS WITH PROPOSED PROJECT SOLUTIONS ........................................ 19
+TABLE 2 KEY MILESTONES AND DELIVERABLES .................................................................................. 25
+TABLE 3 PROJECT SCHEDULE ............................................................................................................... 27
+TABLE 4 TEAM MEMBERS INDIVIDUAL TASKS/ WORK DIVISION ......................................................... 27
+TABLE 5 COMPARISON OF ALGORITHMS ............................................................................................. 31
+TABLE 6 EXTERNAL APIS ..................................................................................................................... 46
+TABLE 7 SDG ......................................................................................................................................... 76
+TABLE 8 CCP ......................................................................................................................................... 77
+ixList of Figures
+FIGURE 1 FLOW CHART ........................................................................................................................ 24
+FIGURE 2 GANTT CHART....................................................................................................................... 26
+FIGURE 3 USE CASE DIAGRAM ............................................................................................................. 32
+FIGURE 4 HIGH LEVEL ARCHITECTURE ............................................................................................... 33
+FIGURE 5 RESULTS ................................................................................................................................ 47
+FIGURE 6 CONFUSION MATRIX NORMALIZED ..................................................................................... 48
+FIGURE 7 CONFUSION MATRIX ............................................................................................................. 48
+FIGURE 8 F1-CONFIDENCE CURVE ....................................................................................................... 49
+FIGURE 9 LABELS CORRELOGRAM ....................................................................................................... 49
+FIGURE 10 LABELS ................................................................................................................................ 50
+FIGURE 11 P CURVE .............................................................................................................................. 51
+FIGURE 12 PR CURVE ........................................................................................................................... 51
+FIGURE 13 R CURVE .............................................................................................................................. 52
+FIGURE 14 TAIN_BATCH0 ...................................................................................................................... 53
+FIGURE 15 TRAIN_BATCH1 .................................................................................................................... 54
+FIGURE 16 TRAIN_BATCH2 .................................................................................................................... 55
+FIGURE 17 TRAIN_BATCH2709 .............................................................................................................. 56
+FIGURE 18 TRAIN_BATCH2791 .............................................................................................................. 57
+FIGURE 19 TRAIN_BATCH2792 .............................................................................................................. 58
+FIGURE 20 VAL_BATCH0_LABELS ......................................................................................................... 59
+FIGURE 21 VAL_BATCH0_PRED ............................................................................................................. 60
+FIGURE 22 VAL_BATCH1_LABELS ......................................................................................................... 61
+FIGURE 23 VAL_BATCH1_PRED ............................................................................................................. 62
+FIGURE 24 VAL_BATCH2_LABELS ......................................................................................................... 63
+FIGURE 25 VAL_BATCH2_PRED ............................................................................................................. 64
+FIGURE 26 VEHICLE DETECTION .......................................................................................................... 65
+FIGURE 27 HELMET DETECTION .......................................................................................................... 66
+FIGURE 28 SIMULATION WEST ............................................................................................................. 67
+FIGURE 29 SIMULATION EAST .............................................................................................................. 68
+FIGURE 30 SIMULATION NORTH ........................................................................................................... 69
+FIGURE 31 SIMULATION SOUTH ............................................................................................................ 70
+FIGURE 32 INTERSECTION SIMULATION ............................................................................................... 71
+xChapter-1 Project Introduction
+1.1. Project Background: Traffic congestion and road safety violations are
+growing concerns in many cities. Traditional traffic signals operate on
+predefined timers that do not account for real-time vehicle density, causing
+inefficiencies such as prolonged waiting times and unnecessary stops at empty
+intersections. Meanwhile, helmet laws for motorcyclists are frequently
+violated, increasing the risk of fatal accidents. Existing surveillance systems
+may detect such violations but lack an integrated response mechanism.
+Our Smart Traffic Signals with Helmet Detection project addresses these issues
+by leveraging computer vision and deep learning. The system employs a
+YOLOv8-based vehicle detection model to count and categorize vehicles at an
+intersection, adjusting the signal duration dynamically to optimize traffic flow.
+Another YOLOv8-based model is used for helmet detection, identifying riders
+without helmets and extracting their number plates for enforcement. The
+integration of automated traffic management and law enforcement mechanisms
+makes this system an innovative solution for improving urban road safety and
+traffic efficiency.
+1.2. Motivation and Need: The motivation behind this project stems from the
+growing challenges of urban traffic management and the need to enhance road
+safety for all users. Several factors highlight the necessity of developing a smart
+traffic signal system with helmet detection. One of the primary concerns is the
+increasing traffic congestion in urban areas worldwide. The rise in the number
+of vehicles has led to significant congestion, and traditional traffic signal
+systems that operate on fixed timers fail to adapt to fluctuating traffic
+conditions. This inefficiency results in longer waiting times, increased fuel
+consumption, and overall poor traffic flow. By implementing a smart traffic
+signal system that dynamically responds to real-time traffic data, cities can
+optimize traffic flow, reduce congestion, and enhance the overall driving
+experience.
+1Another critical factor is road safety, particularly for motorcyclists, who are
+among the most vulnerable road users. Due to the higher risk of severe injuries
+or fatalities in traffic accidents, wearing a helmet is crucial for their safety.
+However, compliance with helmet laws is often inconsistent, and manual
+enforcement is impractical and resource-intensive. An automated system
+capable of detecting helmet usage can ensure consistent enforcement,
+encouraging responsible behavior and enhancing road safety for motorcyclists.
+Furthermore, scalability and efficiency in traffic management remain key
+challenges. Traditional traffic monitoring and enforcement methods rely
+heavily on human intervention, which is not only inefficient but also prone to
+errors. Automating these processes through computer vision and machine
+learning technologies allows for continuous, real-time monitoring without
+constant human supervision. This improves the accuracy and reliability of
+traffic management, reduces human error, and alleviates the burden on law
+enforcement agencies.
+Additionally, advancements in machine learning, particularly in object
+detection and image processing, offer new possibilities for urban planning and
+public safety. The effectiveness of models like YOLO for real-time object
+detection makes them ideal for integration into traffic management systems.
+By leveraging these technologies, cities can obtain accurate and timely data to
+support better decision-making in urban infrastructure development.
+Lastly, the environmental benefits of optimizing traffic flow are significant. A
+smart traffic signal system can reduce vehicle emissions and fuel consumption
+by minimizing stop-and-go traffic, decreasing idling time at intersections, and
+ensuring a smoother flow of vehicles. These improvements contribute to a
+lower carbon footprint, making urban transportation more sustainable.
+21.3. Aims and Objectives: The project aims to develop an intelligent traffic
+signal system that can dynamically adjust signal timings based on real-time
+traffic conditions. By integrating cameras and sensors at traffic intersections,
+the system will monitor traffic flow, count vehicles, and adapt signal phases
+accordingly. Advanced object detection algorithms will be employed to
+optimize traffic movement and reduce congestion, ensuring a smoother and
+more efficient traffic management system.
+In addition to traffic signal optimization, the project will implement a computer
+vision-based helmet detection mechanism for motorcyclists. A deep learning
+model will be trained and deployed to identify whether riders are wearing
+helmets. The objective is to achieve a detection accuracy of at least 75%,
+ensuring reliable enforcement of helmet regulations and enhancing road safety.
+The project will also focus on researching and identifying different types of
+vehicles using advanced object detection techniques such as YOLO. Vehicles,
+including cars, buses, trucks, motorcycles, and vans, will be classified with an
+accuracy goal of at least 75%. This classification will provide accurate data on
+the composition of traffic, enabling the system to adjust signal timings based
+on the type and number of vehicles present at an intersection.
+Comprehensive documentation will be produced throughout the project,
+covering system design, implementation processes, testing methodologies, and
+results. A final report will summarize key findings, performance metrics, and
+recommendations for future improvements or deployment strategies. This
+documentation will serve as a valuable reference for further research and
+development in smart traffic management systems.
+1.4. Problem Solutions for Proposed System: The project utilizes a
+custom-trained object detection model capable of identifying and counting
+various vehicle types, including cars, buses, motorcycles, and other road users.
+Additionally, the model incorporates helmet detection, allowing it to identify
+motorcyclists without helmets. This model is trained using YOLOv8 or a
+3similar object detection framework, ensuring high accuracy and real-time
+performance. The detected vehicle and helmet data serve as key inputs for the
+adaptive signal switching algorithm, which optimizes traffic flow and enhances
+road safety.
+An adaptive traffic signal timing algorithm is integrated into the system to
+dynamically adjust signal durations based on real-time vehicle counts and
+classifications detected by the object detection model. This algorithm helps
+optimize traffic flow at intersections, reducing congestion and improving
+overall traffic efficiency. By utilizing real-time data, the system can respond
+dynamically to varying traffic conditions, ensuring smoother movement and
+reduced wait times for commuters.
+To validate the effectiveness of the system, the project includes the
+development of two simulations. The first simulation focuses on model
+performance validation, demonstrating the accuracy of the vehicle detection
+model in identifying and classifying different vehicle types. This simulation
+also highlights the functioning of the signal switching algorithm by
+dynamically adjusting signal timings based on detected vehicle counts and
+categories. The second simulation is a real-time intersection model designed to
+visually replicate a real-world traffic scenario. It showcases how the signal
+switching algorithm operates in real time, adapting traffic signals based on
+vehicle density, classifications, and helmet detection. This interactive
+simulation provides insights into the practical implementation of the system,
+illustrating its potential real-world impact.
+Comprehensive project documentation is maintained throughout the
+development lifecycle, covering essential aspects such as system architecture,
+design specifications, model training and evaluation, simulation setup, and
+implementation details. This documentation serves as a valuable resource for
+future development, enhancements, and potential real-world deployment.
+To ensure transparency and reproducibility, the project's source code, datasets,
+trained models, and simulation setup are stored in a publicly accessible GitHub
+4repository. This repository enables other researchers and developers to explore,
+contribute, and build upon the project, facilitating further research and
+innovation in the field of smart traffic management.
+1.5. Technology Transfer/Diffusion Approach: The implementation of
+Smart Traffic Signals with Helmet Detection provides a scalable and adaptable
+solution that can be integrated into real-world traffic management systems. The
+project outputs will be transferred to potential beneficiaries such as transport
+authorities, traffic management organizations, and city planners through
+various approaches.
+One of the key methods for technology transfer is a simulation-based
+demonstration for stakeholders. To ensure effective implementation, the
+system will first be demonstrated using interactive simulations that visually
+represent its capabilities. These simulations will showcase the vehicle detection
+model accurately identifying different vehicle types and detecting helmetless
+motorcyclists. Additionally, the signal switching algorithm will dynamically
+adjust signal durations based on real-time traffic density. A real-world
+intersection simulation will also be included to illustrate how the system
+operates under different traffic conditions. These demonstrations will allow
+stakeholders to evaluate the effectiveness of the system before considering
+real-world deployment.
+Another important aspect of knowledge dissemination is open-source research
+and documentation. The project will generate detailed documentation covering
+system architecture, algorithm design, and implementation procedures. This
+information will be shared with research institutions, universities, and city
+planning authorities to encourage further development and adaptation. The
+documentation will include details on the algorithm design and implementation
+of adaptive traffic signals, YOLO-based vehicle detection model parameters
+for accurate classification, and system integration guidelines for real-world
+deployment. By providing these resources, the project aims to assist developers
+5and researchers in extending its functionality or integrating the system into
+existing smart city infrastructures.
+Furthermore, future collaboration and deployment strategies will be pursued to
+ensure real-world impact. Partnerships with government bodies, smart city
+initiatives, and research institutions will be explored to facilitate large-scale
+adoption. Municipal traffic departments may conduct live testing at controlled
+intersections, while AI and computer vision researchers can contribute to
+improving detection accuracy. Additionally, urban planners can play a role in
+implementing the system in high-traffic areas. By following these technology
+diffusion strategies, the project ensures that its findings and implementations
+can be effectively transferred, scaled, and integrated into real-world traffic
+management and enforcement systems.
+1.6. Relevance to Course Modules: The Smart Traffic Signals with Helmet
+Detection project is an application of various computer science principles and
+technologies studied during the BS Computer Science (BSCS) program. It
+integrates machine learning, computer vision, and algorithmic techniques to
+develop an intelligent traffic management system. Several courses have played
+a significant role in shaping the project's development.
+The Artificial Intelligence (CSC471) course contributed to the project by
+providing AI techniques, particularly deep learning and computer vision, to
+detect vehicles and identify helmetless motorcyclists using YOLOv8-based
+object detection models. Additionally, AI-driven signal switching algorithms
+were implemented to dynamically adjust traffic signals based on real-time
+traffic density, improving traffic flow and safety.
+The Deep Learning (CSC464) course was instrumental in training and fine-
+tuning the YOLOv8 model for vehicle and helmet detection. Techniques such
+as transfer learning and custom dataset training were applied to enhance
+detection accuracy. These methods allowed the model to adapt to different
+environmental conditions and improve overall performance.
+6The Parallel and Distributed Computing (CSC431) course provided
+knowledge on accelerating model training and processing using GPU-based
+computation on Google Colab. Parallel computing techniques were also
+explored to efficiently handle real-time detection and decision-making,
+ensuring the system's responsiveness in a real-world scenario.
+The Software Engineering (CSC351) course played a crucial role in
+structuring the project. The team followed software development
+methodologies, including requirement analysis, system design, and testing, to
+ensure a robust and scalable solution. The modular software architecture
+allowed different components—such as the detection model, signal switching
+algorithm, and simulation—to function cohesively. Furthermore, formal
+reports, including the Final Year Project Report, system documentation, and
+user manuals, were prepared to provide comprehensive project documentation.
+1.7. Structure of the Report:
+Chapter 1: Project Introduction
+This chapter provides an overview of the project, explaining the motivation
+and need for developing a smart traffic signal system with helmet detection. It
+outlines the project’s aims, objectives, problem statement, and the expected
+outcomes of the proposed solution.
+Chapter 2: Related System Analysis/Literature Review
+This chapter reviews existing traffic management and helmet detection
+systems, discussing their methodologies, advantages, and limitations. It
+presents a comparison of these systems with the proposed project, highlighting
+improvements and innovations.
+7Chapter 3: Research Approach
+This chapter outlines the research methodology, including system design,
+algorithm development, and implementation strategies. It provides a
+justification for the chosen approach and details the key milestones and project
+schedule.
+Chapter 4: Dataset Description and Features
+This chapter explains the datasets used for vehicle and helmet detection,
+describing their structure, preprocessing techniques, and sources. It includes
+dataset evaluation and benchmarking to validate the model’s effectiveness.
+Chapter 5: System Design and Architecture
+This chapter presents the high-level architecture of the system, detailing
+various modules such as image acquisition, preprocessing, feature extraction,
+vehicle and helmet detection, traffic data analysis, and signal control. It
+includes system diagrams to illustrate component interactions.
+Chapter 6: Methodologies
+This chapter describes the methodologies used in system implementation,
+including model customization, training techniques, algorithm development,
+and simulation processes. It explains how different technologies were
+integrated to achieve the project’s objectives.
+Chapter 7: Algorithm Development
+This chapter details the algorithms implemented for vehicle and helmet
+detection, traffic density calculation, and adaptive signal switching. It includes
+pseudocode and descriptions of how these algorithms work within the system.
+8Chapter 8: Data Design
+This chapter discusses data storage, processing, and structuring for the system.
+It explains how vehicle and helmet detection data is collected, formatted, and
+utilized to optimize traffic signals and enforce helmet laws.
+Chapter 9: Implementation
+This chapter explains the step-by-step implementation of the system, from
+dataset preparation to model training, real-time detection, and traffic signal
+control. It also covers the use of external APIs and software tools.
+Chapter 10: Model Evaluation
+This chapter evaluates the performance of the trained models using key metrics
+such as accuracy, precision, recall, and mean average precision (mAP). It
+presents qualitative and quantitative results to assess the system’s reliability.
+Chapter 11: Simulations and Results
+This chapter discusses the testing and validation of the system through
+simulations, demonstrating how traffic signals adapt dynamically based on real-
+time detections. It includes graphical results showcasing signal timing
+adjustments.
+Chapter 12: Conclusion and Future Work
+This chapter summarizes the achievements of the project, reviewing whether
+the objectives were met. It also highlights the system’s limitations and proposes
+future improvements, including real-world deployment and additional features.
+9Chapter- 2 Related System Analysis/ Literature Review
+2.1. Review
+2.1.1 Smart Control of Traffic Light System using Image
+Processing
+2.1.1.1 Introduction
+The project [1] addresses the growing concern of urban traffic congestion due to
+increasing population and vehicles. Traditional traffic control systems are
+time-dependent and inefficient, leading to delays, increased fuel
+consumption, and pollution. To address this, the paper proposes a traffic
+control system based on image processing using MATLAB and Arduino
+UNO. This system aims to dynamically adjust traffic light timings based on
+real-time traffic density and count.
+2.1.1.2 Working Model
+The system acquires images from a webcam, processes them using MATLAB to
+calculate traffic density and count, and then adjusts traffic light timings
+accordingly. It uses Arduino UNO boards to control the traffic lights. The
+image processing involves converting images to grayscale, thresholding, and
+morphological operations to calculate traffic parameters. The Arduino
+boards receive data from MATLAB and control the traffic lights based on
+the calculated parameters.
+2.1.1.3 Advantages
+The system reduces waiting time on empty roads by optimizing traffic flow, ensuring
+that vehicles are not unnecessarily delayed at intersections. It provides real-
+time traffic control by dynamically adjusting signals based on actual traffic
+conditions, improving overall efficiency. Additionally, the solution is cost-
+effective and does not require complex infrastructure, making it a practical
+and scalable option for modern traffic management.
+2.1.1.4 Disadvantages
+10Traffic count accuracy may not be 100%, which can lead to potential inaccuracies in
+traffic estimation. This could impact the overall effectiveness of the system
+in managing traffic flow efficiently. Additionally, the system relies on a
+webcam and Arduino UNO boards, which may have certain limitations in
+specific scenarios. Factors such as low lighting conditions, camera angle, or
+hardware constraints could affect the reliability of the system. Furthermore,
+the implementation and maintenance of this system may require technical
+expertise. Setting up the hardware, calibrating the sensors, and
+troubleshooting issues could be challenging for individuals without a
+technical background.
+2.1.1.5 Summary
+The proposed system offers a dynamic and efficient traffic control solution by utilizing
+image processing and Arduino technology. It aims to reduce congestion, fuel
+consumption, and pollution associated with traditional traffic control systems.
+While providing a cost-effective alternative, it may require further refinement
+for higher accuracy in traffic estimation.
+2.1.2 Smart controlling for traffic light time
+2.1.2.1 Introduction
+The project [2] discusses the challenges of traffic congestion and accidents in cities,
+highlighting the need for intelligent transportation systems. It introduces a
+smart traffic light control system based on artificial intelligence and image
+processing to optimize traffic flow and reduce travel time.
+2.1.2.2 Working Model
+The system uses cameras to capture images of traffic at intersections. These images
+are processed using image segmentation and artificial neural networks to
+identify and count vehicles. A fuzzy logic controller then adjusts traffic light
+timings based on the vehicle count, increasing green light duration as traffic
+density rises.
+112.1.2.3 Advantages
+The system dynamically adjusts traffic light timings based on real-time traffic
+conditions, leading to improved traffic flow. Unlike traditional sensor-based
+systems, which require significant infrastructure investment, the use of
+cameras for vehicle detection proves to be a more cost-effective solution.
+Additionally, the integration of image processing and AI techniques ensures
+accurate vehicle detection and traffic analysis, enhancing the overall
+efficiency of the system. By reducing congestion and optimizing traffic
+flow, this approach not only improves transportation efficiency but also
+enhances road safety, minimizing the risk of accidents.
+2.1.2.4 Disadvantages
+The accuracy of vehicle detection may be influenced by the alignment of the cameras,
+making careful installation and regular maintenance essential to ensure
+optimal performance. Although the system maintains an average error rate
+of 2%, certain factors, such as crowded scenes or misaligned cameras, can
+contribute to an increased margin of error.
+2.1.2.5 Summary
+The system offers an innovative approach to traffic management, using advanced
+technologies to improve traffic flow and reduce travel times. By leveraging
+artificial intelligence and image processing, it provides a cost-effective and
+efficient solution for modern cities facing traffic congestion and safety
+challenges.
+2.1.3 Smart traffic lights switching and traffic density calculations
+using video processing
+2.1.3.1 Introduction
+Addressing vehicular congestion in urban areas has been a subject of extensive
+research, leading to the development of various innovative solutions. This
+literature review [3] explores four distinct approaches proposed by different
+researchers to tackle this pervasive issue.
+122.1.3.2 Working Model
+VANETs (Vehicular Ad Hoc Networks) can be implemented to enhance
+communication between vehicles and roadside units, providing real-time
+traffic information that improves overall traffic management. Additionally,
+cameras and data delivery systems play a crucial role in efficiently
+transmitting traffic data, aiding in congestion management by ensuring timely
+updates on road conditions. To further optimize traffic flow, photoelectric
+sensors can be deployed to dynamically adjust traffic signal timings based on
+real-time traffic density, ensuring smoother movement of vehicles. Moreover,
+employing DSP (Digital Signal Processing) and FPGA (Field-Programmable
+Gate Array) logic control allows for dynamic traffic signal adjustments
+according to user demands, offering greater flexibility in managing
+congestion effectively.
+2.1.3.3 Advantages
+Real-time communication plays a crucial role in assisting drivers with informed
+decision-making, ultimately helping to reduce congestion on the roads.
+Surveillance-based systems enhance this process by enabling efficient data
+transmission, demonstrating their potential in managing congestion in real
+time. Integrated traffic management systems further improve traffic efficiency
+by dynamically adjusting signals based on traffic density, ensuring a smoother
+flow of vehicles while also accommodating emergency scenarios.
+Additionally, intelligent traffic control systems offer flexibility in signal
+timings, allowing them to adapt dynamically to user demands and varying
+traffic conditions, thereby optimizing overall traffic management.
+2.1.3.4 Disadvantages
+VANET frameworks require extensive hardware installation on vehicles, which limits
+their feasibility and increases dependence on user decisions. This dependency
+makes widespread adoption challenging, as users must be willing to equip
+their vehicles with the necessary technology.
+13Similarly, systems that rely on sensors and FPGA logic control face challenges related
+to constant maintenance and environmental susceptibility. These systems
+require frequent upkeep to ensure functionality, and exposure to harsh
+environmental conditions can lead to damage, reducing their reliability and
+increasing operational costs.
+2.1.3.5 Summary
+Propose Vehicular Ad Hoc Networks (VANETs) as a solution to congestion. VANETs
+facilitate communication between vehicles and roadside units, offering real-
+time traffic information exchange crucial for aiding drivers in making
+informed decisions.
+2.1.4 Intelligent Traffic Management Systems
+2.1.4.1 Introduction
+With the ongoing trend of urbanization, the world is witnessing a rapid expansion of
+cities, leading to various socio-economic challenges. Among these
+challenges, traffic congestion stands out as a significant issue affecting the
+daily lives of urban dwellers. As cities grow, the influx of vehicles on roads
+exacerbates congestion problems, particularly in mega cities where traffic
+density is highest. The inability to accurately estimate and manage traffic in
+real time further compounds the problem, necessitating the development of
+intelligent traffic management systems.
+2.1.4.2 Working Model
+The proposed systems [4] vary in their design and functionality. VANET-based systems
+utilize ITLs to gather traffic information and communicate with vehicles,
+while infrared-based systems employ transmitters and receivers to track
+vehicles and detect violations. Fuzzy logic controllers dynamically adjust
+traffic light timings based on traffic conditions, while intelligent traffic
+14controllers based on FPGAs consider vehicle count and speed to optimize
+signals.
+These systems aim to alleviate traffic congestion and improve transportation
+efficiency, albeit with varying degrees of success and limitations. Further
+research is needed to develop cost-effective, scalable solutions capable of
+addressing the complex challenges of urban traffic management in real time.
+2.1.4.3 Advantages
+VANET-based systems facilitate real-time communication between vehicles
+and infrastructure, enabling efficient traffic updates and accident
+notifications. Infrared-based systems provide a cost-effective solution for
+tracking vehicles and detecting traffic violations. Meanwhile, fuzzy logic
+controllers dynamically optimize traffic light timings, reducing delays and
+improving overall traffic flow. Intelligent traffic controllers utilizing FPGAs
+enhance accuracy in traffic management while also contributing to pollution
+reduction. Additionally, the integration of photoelectric sensors and image
+processing methods automates traffic control at intersections, leading to
+reduced waiting times and improved efficiency.
+2.1.4.4 Disadvantages
+VANET systems may face limitations due to their reliance on specific
+hardware installed in vehicles, which can restrict their widespread adoption
+and functionality. Similarly, infrared-based systems require a direct line of
+sight between transmitters and receivers, making them less flexible in
+dynamic traffic environments where obstacles may obstruct communication.
+Fuzzy logic controllers, while useful for adaptive decision-making, can pose
+significant implementation challenges in complex traffic scenarios due to
+their inherent complexity and the need for extensive fine-tuning. Likewise,
+intelligent traffic controllers based on FPGAs necessitate the use of costly
+sensors and require constant database connectivity, which can increase the
+overall system expense and dependency on stable network infrastructure.
+15Moreover, photoelectric sensors and image processing methods, although
+effective in traffic monitoring, may result in high maintenance costs. They can
+also struggle with environmental factors such as occlusion and shadow
+effects, potentially reducing their accuracy and reliability in real-world
+applications.
+2.1.4.5 Summary
+Urbanization has led to numerous socio-economic challenges, with traffic
+congestion being a major issue. Mega cities are particularly affected by the
+ever-increasing traffic, which makes it challenging to manage traffic
+efficiently in real time. Various techniques have been proposed to automate
+and optimize traffic flow, aiming to alleviate congestion and improve
+transportation systems.
+2.1.5 Smart Control of Traffic Light System using Image Processing
+2.1.5.1 Introduction
+The paper [5] discusses the increasing traffic congestion issue in Malaysia due
+to the growing number of vehicles and the limitations of traditional traffic
+light systems. It introduces the concept of an adaptive traffic light control
+system using image processing to monitor real-time traffic density and adjust
+signal timings accordingly.
+2.1.5.2 Working Model
+The proposed system uses high-resolution cameras to capture images of each
+lane at a junction. These images are processed using edge detection techniques
+to determine traffic density. The system then allocates more time for lanes
+with higher traffic density, effectively reducing congestion. The Canny edge
+detection algorithm is used for its accuracy and efficiency in extracting edges.
+162.1.5.3 Advantages
+The system features real-time monitoring, allowing it to adjust signal timings
+based on actual traffic conditions. This leads to a more efficient flow of
+vehicles and helps prevent unnecessary delays. Unlike traditional traffic
+management systems that rely on fixed signal timings, this system
+incorporates adaptive control, dynamically adjusting to changing traffic
+patterns. As a result, it minimizes waiting times and improves overall road
+efficiency. Additionally, the system is cost-effective, as it leverages existing
+infrastructure and cameras, eliminating the need for additional sensors or
+specialized hardware. This makes it a practical and scalable solution for
+modern traffic management.
+2.1.5.4 Disadvantages
+The accuracy of the system is highly dependent on the quality of the images
+captured. Various factors, such as weather conditions and potential camera
+malfunctions, can impact image clarity, leading to decreased detection
+performance. Additionally, while the Canny edge detection algorithm is
+known for its efficiency, processing images from multiple lanes in real-time
+may still introduce delays in signal adjustments, affecting the responsiveness
+of the system. To maintain reliability, regular maintenance of cameras and
+processing equipment is essential. Ensuring that all components function
+correctly will help prevent system failures and maintain optimal performance.
+2.1.5.5 Summary
+The adaptive traffic light control system proposed in the paper offers a
+solution to the growing traffic congestion problem in Malaysia. By using
+image processing techniques, the system can effectively monitor and adjust
+traffic signal timings in real-time, leading to smoother traffic flow and
+reduced congestion. However, the system's effectiveness relies on the quality
+of the images captured and the efficiency of the processing algorithms.
+Regular maintenance and monitoring are essential to ensure the system's
+continued reliability.
+172.2. Comparison
+Application Weakness Proposed Project Solution
+ Our project uses YOLOv8,
+a state-of-the-art object
+detection model, providing
+ Traffic count accuracy
+higher accuracy in vehicle
+may not be 100%.
+detection.
+Smart Control of
+ Relies on webcam and
+ By using robust cameras
+Traffic Light Arduino UNO boards
+and scalable hardware
+with limitations.
+System using Image infrastructure, we aim to
+ Implementation and
+overcome the limitations of
+Processing
+maintenance require webcams and Arduino.
+ The system design will be
+technical expertise.
+user-friendly to minimize
+technical challenges.
+ Our project focuses on
+ VANETs require image-based vehicle
+Smart traffic lights
+extensive hardware detection, eliminating the
+installation, limiting need for extensive
+switching and traffic
+feasibility. hardware installations.
+density calculation
+ Sensor-based systems
+using video require maintenance  We will use robust
+and are simulation techniques to
+processing
+environmentally minimize environmental
+vulnerable. impact and maintenance
+requirements.
+ The proposed system uses
+high-resolution cameras for
+ Dependence on specific
+real-time traffic analysis,
+hardware for VANET-
+avoiding the limitations of
+Intelligent Traffic based systems.
+line-of-sight infrared
+ Infrared systems need
+Management
+systems.
+line-of-sight, limiting
+Systems  We focus on minimizing
+flexibility.
+hardware dependencies and
+ High maintenance and
+leveraging existing
+costs for sensors.
+infrastructure to reduce
+maintenance and costs.
+18 Our system will include
+weather-resistant camera
+setups and real-time data
+processing optimizations to
+ Accuracy depends on
+ensure accurate and prompt
+Smart traffic light
+image quality, which
+traffic signal adjustments,
+can be affected by
+control system using
+even in adverse weather
+weather.
+conditions.
+image processing
+ Real-time processing
+ Leveraging advanced edge
+may introduce delays.
+detection and image
+processing techniques to
+improve real-time
+processing speed.
+Table 1 Related System Analysis with proposed project solutions
+2.3. Key Benefits and Beneficiaries
+ Benefits:
+The system improves traffic flow by dynamically adjusting traffic signal
+timings based on real-time vehicle count. This optimization helps reduce
+congestion and minimizes wait times at intersections, ensuring a
+smoother and more efficient movement of vehicles.
+In addition to enhancing traffic efficiency, the helmet detection feature
+promotes road safety by identifying motorcyclists who are not wearing
+helmets. By encouraging compliance with safety regulations, this
+system plays a crucial role in reducing the risk of severe injuries in case
+of accidents.
+Efficient traffic management also leads to a reduction in fuel
+consumption and vehicle emissions. By minimizing idle time at
+intersections, the system helps lower fuel usage and decrease harmful
+emissions, contributing to a greener and more sustainable environment.
+The system is both cost-effective and scalable, as it leverages existing
+infrastructure such as cameras and advanced image processing
+technology. This makes it adaptable to different urban settings without
+requiring significant additional investment, allowing for seamless
+integration into various traffic management frameworks.
+19Furthermore, the system provides accurate traffic data by collecting
+information on vehicle counts and types. This valuable data can assist
+traffic management authorities in planning and decision-making,
+enabling more effective strategies for urban mobility and infrastructure
+development.
+ Beneficiaries:
+Urban commuters will experience significant benefits from the
+improved traffic flow, as it will reduce travel time and alleviate the stress
+caused by traffic congestion. By ensuring smoother movement on the
+roads, the system enhances daily travel convenience and efficiency.
+Traffic management authorities will also benefit from the system, as it
+provides valuable insights through accurate traffic data. This data can
+be leveraged to improve traffic planning and management strategies,
+ensuring better regulation and control of urban traffic.
+Environmental agencies will find the system advantageous due to its
+role in reducing fuel consumption and emissions. By optimizing traffic
+flow and minimizing idle time, the system contributes to sustainability
+goals and helps mitigate urban air pollution, supporting cleaner and
+healthier cities.
+Law enforcement agencies will be empowered with helmet detection
+capabilities, enabling them to monitor and enforce helmet laws more
+effectively. This not only enhances compliance with safety regulations
+but also promotes public safety by reducing the risk of injuries in traffic
+accidents.
+City planners and policymakers will gain valuable data-driven insights
+from the system, which can assist in urban planning and policy
+formulation. By utilizing real-time and historical traffic data, authorities
+can design smarter, safer, and more efficient cities, ensuring sustainable
+urban development.
+202.4. Summary
+The literature review identifies various intelligent traffic management
+systems that utilize technologies like image processing, artificial
+intelligence, and sensor networks to optimize traffic flow. While these
+systems offer improvements over traditional static traffic control
+methods by providing real-time adjustments, they often face challenges
+such as accuracy issues, dependency on hardware, and maintenance
+requirements.
+Our proposed project builds upon these existing solutions by integrating
+vehicle and helmet detection using machine learning, combined with a
+dynamic simulation environment to visualize real-time traffic scenarios.
+This approach aims to address the limitations of previous systems by
+providing a more accurate, scalable, and adaptable traffic management
+solution, ultimately enhancing road safety and efficiency.
+21Chapter- 3 Research Approach
+3.1 Development and Research Methodology:
+Our development methodology for the smart traffic signal system follows a
+structured approach that encompasses system design, algorithm development,
+implementation, testing, and evaluation. The process begins with system design,
+where we conduct a thorough literature review to gain insights into existing
+solutions and technologies. Based on this research, we design the overall system
+architecture, ensuring the seamless integration of object detection algorithms and
+signal switching logic. To further illustrate the system’s structure and interactions,
+we develop use case diagrams and system flowcharts. Additionally, we prepare
+comprehensive documentation outlining the system design.
+Following the system design phase, we proceed with algorithm development and
+implementation. We employ the YOLO algorithm for vehicle detection and traffic
+density calculation, enabling the system to analyze real-time traffic conditions. A
+signal switching algorithm is then developed to dynamically adjust traffic signal
+timings based on the detected traffic density. To enhance road safety, we integrate
+a helmet detection feature that identifies helmetless riders for enforcement
+purposes. Throughout this phase, we maintain detailed documentation of the
+algorithm development and implementation.
+The final phase involves testing, evaluation, and finalization. We conduct unit
+testing for each module to validate individual functionalities and perform
+integration testing to ensure seamless interaction between system components. The
+system is then tested using simulated traffic scenarios to assess its overall
+performance and effectiveness. To conclude the development process, we compile
+a comprehensive documentation report that encompasses system design,
+implementation details, and evaluation results.
+3.2 Justification
+Starting with a thorough system design phase ensures that all components of the
+project are well understood and documented. This phase allows us to clarify user
+needs, set clear requirements, and create a detailed plan for how the various system
+22components will interact. By defining the system architecture early on, we can
+mitigate potential integration issues and ensure that the system's objectives are
+achievable.
+Implementing the YOLO algorithm for vehicle detection and traffic density
+calculation ensures high accuracy in identifying vehicles and assessing traffic
+flow. Integrating helmet detection adds a critical safety feature, demonstrating the
+system's adaptability to real-world needs. Developing a signal switching algorithm
+that dynamically adjusts timings based on traffic conditions aligns with the
+project's goal to optimize traffic flow and reduce congestion. This phase is central
+to achieving the project's core functionalities, making it a critical component of the
+methodology.
+Rigorous testing at both unit and integration levels ensures that each component
+of the system functions correctly and interacts seamlessly with others. Simulated
+traffic scenarios provide a controlled environment to evaluate the system's
+performance, allowing us to identify and address potential issues before real-world
+deployment. Comprehensive documentation throughout this phase not only
+facilitates the development process but also provides a valuable reference for
+future enhancements or adaptations of the system.
+233.3 Project Flow
+Smart Traffic Signals with Helmet
+Detection System Development Plan
+FYP-1
+Literature Review and Research
+System Implementation
+System Implementation
+System Requirements and
+Setup
+Design
+Algorithm Development
+System Architecture Design
+FYP-2 Signal switching Algorithm
+Development
+Integration and Testing
+Midterm Presentation and
+Review
+Evaluation and Finalization
+Documentation and
+Finalization
+(End of FYP-2, Project
+(End of FYP-1)
+Completion)
+Figure 1 Flow Chart
+243.4 Key Milestones and Deliverables
+Elapsed time
+S.
+since start of Milestone Deliverable
+No.
+the project
+1 1 Month Completion of Literature Literature review report
+Review and Research
+2 2 Months System Architecture Design System architecture document
+3 3 Months Develop Use Case Diagrams Use case diagrams, system flow
+and Flow Charts charts
+4 4 Months System Design Documentation Documented system design
+5 6 Months YOLO Algorithm Vehicle detection algorithm
+Implementation
+6 7 Months Develop Signal Switching Signal switching algorithm
+Algorithm
+7 7 Months FYP-1 Midterm Presentation Feedback from midterm
+presentation
+8 8 Months Integrate Helmet Detection Helmet detection implementation
+Feature
+9 9 Months Unit Testing for Each Module Unit testing results
+10 10 Months Integration Testing Integration testing results
+11 11 Months Simulated Traffic Scenarios Performance evaluation reports
+Testing
+12 12 Months Final Documentation and Comprehensive project
+Evaluation documentation
+13 12 Months FYP-2 Final Presentation Final presentation and feedback
+Table 2 Key milestones and deliverables
+253.5 Gantt Chart
+Figure 2 Gantt Chart
+263.6 Project Schedule
+I Task Name Start End Predecesso
+D r
+1 Literature Review and Research Mar 24 Apr 24
+2 System Architecture Design Apr 24 May 24 1
+3 Develop Use Case Diagrams and System Flow May 24 June 24 2
+Charts
+4 System Design Documentation June 24 July 24 3
+5 Implement YOLO Algorithm for Vehicle July 24 Aug 24 4
+Detection
+6 Develop Signal Switching Algorithm Aug 24 Sep 24 5
+7 FYP-1 Presentation and Feedback Sep 24 Sep 24 6
+8 Integrate Helmet Detection Feature Oct 24 Nov 24 7
+9 Unit Testing for Each Module Nov 24 Dec 24 8
+1 Integration Testing Dec 24 Jan 25 9
+0
+1 Simulated Traffic Scenarios Testing Jan 25 Feb 25 10
+1
+1 Final Documentation and Evaluation Feb 25 Mar 25 11
+2
+1 FYP-2 Presentation and Finalization Mar 25 Mar 25 12
+3
+Table 3 Project Schedule
+3.7 Team Members Individual Tasks/ Work Division
+Student Name Key Responsibilities
+Muhammad Yahya 1.Lead on documentation, coordinating the team’s efforts.
+2. Responsible for the YOLO-based image recognition processes for
+vehicle and helmet detection.
+3. Assisted on the signal switching logic and algorithm.
+Muhammad Sajid 1. Worked on signal switching logic and algorithms.
+2.Assisted in all documentation tasks and system design with the team.
+3.Prepared the meeting log.
+Table 4 Team members individual tasks/ Work division
+27Chapter- 4 Dataset Description and Features
+This project integrates two datasets customized for vehicle and helmet detection,
+focusing on real-world diversity and robustness. Both datasets follow YOLO-
+compatible annotation formats and are enhanced with augmentation techniques to
+address class imbalances.
+1. Consolidated Dataset Overview
+The final dataset combines multiple sources and includes six key classes: Bus,
+Car, Motorcycle, Truck, Van, with helmet, and without helmet. While initial
+datasets provided some images for Motorcycle, with helmet, and without helmet
+classes, these were insufficient. To address this, additional images were added and
+augmented to ensure adequate representation.
+2. Classes
+Seven Classes: Bus, Car, Motorcycle, Truck, Van, with helmet, without helmet.
+3. Size
+ Training Dataset: 3000 images with labels
+ Validation Dataset: 600 images with labels
+4. Features
+Images were sourced and augmented to simulate diverse conditions, including
+varying lighting, angles, and backgrounds, to enhance the robustness of the model.
+The labels that were not in YOLO format were first converted to the correct
+format before training.
+5. Data Sources
+ Vehicle Detection:
+1. City Intersection | Computer Vision by Mohamadreza Momeni [6]
+1400 Training images; 400 Validation images
+282. Motorcycle Class [7]
+Sourced 150 additional images from "Pak Bike Image Dataset" by Mohid Abdul
+Rehman.
+ Helmet Detection:
+1. Rider, With Helmet, Without Helmet, Number Plate by Anees Aro M [8]
+104 Training images; 20 Validation Images
+2. Bike Helmet Detection Dataset by Survival Man [9]
+Integrated 600 images specifically for with helmet and without helmet classes.
+Note: The helmet detection module dataset from the previous round contained
+additional classes, including "rider" and "number plate". However, in the second round,
+the dataset was extended and additional data was incorporated for better class
+representation, but the "rider" and “number plate” classes were removed from the final
+class list for the current iteration of the project.
+4.1 Literature Survey of Algorithms
+1. YOLOv8 [10]
+Known for real-time object detection, offering a balance between speed and
+accuracy. Performs well with large, diverse datasets but requires high
+computational power.
+2. Faster R-CNN [11]
+Renowned for precise localization and detection. Suitable for smaller, focused
+datasets but computationally intensive.
+3. MobileNetV2 + SSD [12]
+Combines lightweight feature extraction with efficient detection. Optimized for
+deployment on resource-constrained devices, offering a trade-off between speed
+and accuracy.
+294.2 Parameters Settings
+1. YOLOv8:
+o Image Size: 640x640.
+o Batch Size: 16.
+o Epochs: 100.
+o Learning Rate: 0.01.
+o Optimizer: Adam.
+2. Faster R-CNN:
+o Backbone: ResNet-50.
+o Image Size: 1024x1024.
+o Batch Size: 4.
+o Epochs: 50.
+o Learning Rate: 0.001.
+o Optimizer: SGD with momentum.
+3. MobileNetV2 + SSD:
+o Image Size: 300x300.
+o Batch Size: 32.
+o Epochs: 80.
+o Learning Rate: 0.001.
+o Optimizer: Adam.
+4.3 Termination Condition
+For all models, training will be terminated based on the following conditions:
+ Epochs: Fixed number of epochs (as specified above) or early stopping based on
+validation loss (patience of 10 epochs).
+ Validation Loss: If validation loss does not improve for 10 consecutive epochs,
+training will be stopped early.
+4.4 Performance Measures
+1. Mean Average Precision (mAP): Precision of bounding boxes.
+2. Intersection over Union (IoU): Overlap of predicted and ground truth boxes.
+3. Accuracy: Classification accuracy across classes.
+4. FPS: Speed of real-time detection.
+5. Precision, Recall, F1-Score: Evaluating true positives, false positives, and false
+negatives.
+30Metric YOLOv8 Faster R-CNN MobileNetV2 + SSD
+mAP High Highest Moderate
+IoU High Highest Moderate
+Accuracy High Highest Moderate
+FPS High Moderate Highest
+Precision High Highest Moderate
+Recall High Highest Moderate
+F1-Score High Highest Moderate
+Table 5 Comparison of Algorithms
+4.5 Conclusion
+YOLOv8 and Faster R-CNN are ideal for the project, balancing accuracy and real-
+time processing. MobileNetV2 + SSD is a viable alternative for resource-
+constrained deployments. Augmented datasets significantly improved the
+robustness of the detection models, addressing initial class imbalances effectively.
+31Chapter- 5 Use Case Diagram
+Figure 3 Use Case Diagram
+32Chapter- 6 High Level Architecture
+Image Acquisition
+System
+(Traffic Cameras)
+Image Preprocessing
+Module
+Feature Extraction
+Module
+Helmet and Vehic le System Monitoring and
+Detection Module Maintenance
+(Machine Learning)
+Traffic Data Analysis
+M odule
+Traffic Signal Control
+System
+Alert Generation
+Figure 4 High Level Architecture
+33Description:
+1. Image Acquisition System: This component uses traffic cameras to capture real-
+time images or video frames of traffic.
+2. Image Preprocessing Module: This component enhances the captured images
+for better feature extraction.
+3. Feature Extraction Module: This component extracts relevant features from the
+preprocessed images needed for detecting helmets and vehicles.
+4. Helmet and Vehicle Detection Module: This component applies machine
+learning models to detect helmets on motorcyclists and classify vehicles.
+5. Traffic Data Analysis Module: This component analyzes the traffic data to
+determine patterns, density, and trends.
+6. Traffic Signal Control System: This component adjusts traffic signal timings
+based on the analyzed data to optimize traffic flow.
+7. Alert Generation: This component generates alerts for traffic violations.
+8. System Monitoring and Maintenance: This component ensures the smooth
+operation of the entire system by performing regular monitoring and maintenance
+tasks.
+34Chapter- 7 Methodologies
+The proposed methodology comprises four main stages:
+i. Data Preparation
+The verification of dataset adequacy involves assessing the dataset to ensure it is
+suitable for training, making necessary corrections such as addressing class imbalance,
+applying data augmentation techniques, and merging multiple datasets to improve
+model performance. These steps help create a more balanced and representative
+dataset, reducing biases and enhancing the robustness of the trained model.
+Once the dataset is verified and refined, the next step is converting and adjusting the
+data into the YOLO format. This process involves ensuring that all images and
+annotations are correctly structured according to YOLO's requirements, with proper
+labeling and bounding box coordinates. Proper formatting is crucial for effective
+model training, as inconsistencies in labeling can negatively impact detection
+accuracy.
+ii. Feature Extraction and Model Customization
+The YOLOv8 architecture was modified by integrating custom neural network layers
+to improve its performance and adaptability for specific tasks. This modification
+involved the incorporation of advanced attention mechanisms to refine feature
+extraction and enhance model accuracy.
+To further optimize feature learning, layers such as LSKA and SPPF_LSKA were
+implemented. These attention mechanisms played a crucial role in improving the
+model’s ability to focus on essential features, leading to better detection and
+classification capabilities.
+35iii.Model Training and Optimization
+The training process involves iterative learning using the prepared dataset and an
+optimized model architecture. Through multiple training cycles, the model gradually
+refines its parameters to enhance its predictive capabilities.
+Following training, the model undergoes performance evaluation on training,
+validation, and test datasets. This evaluation helps identify areas for improvement and
+ensures that the model achieves higher accuracy by adjusting hyperparameters, refining
+the architecture, or addressing potential overfitting or underfitting issues.
+iv.Algorithm Development and Simulation
+The project involves the development of algorithms for vehicle detection, helmet
+detection, and signal switching. These algorithms play a crucial role in ensuring
+accurate identification of different vehicle types, detecting whether riders are wearing
+helmets, and dynamically adjusting traffic signals based on real-time data. By
+integrating these algorithms, the system aims to improve traffic management and
+enhance road safety.
+To evaluate the effectiveness of the proposed system, a simulation of the integrated
+detection system is conducted. This simulation serves as a demonstration of real-world
+applications, showcasing how vehicle and helmet detection contribute to adaptive
+signal switching. By replicating real-world traffic scenarios, the simulation provides
+insights into the system's performance and potential impact on traffic flow and
+enforcement measures.
+7.1 Dataset Preparation and Preprocessing
+Initially, the dataset was analyzed for its suitability. Upon identifying class imbalance
+and limited diversity in the dataset, augmentation techniques were applied. Multiple
+datasets were then merged, labels were corrected, and redundancies were removed,
+ensuring high-quality data for model training.
+367.2 Feature Extraction and YOLO customization
+Advanced neural network techniques were implemented to improve feature extraction:
+ SPPF_LSKA Layer: Enhanced feature propagation by integrating a novel
+attention mechanism.
+ STE-Neck Module: Combined multi-scale features for improved object
+detection accuracy.
+ Adjustments to the YOLOv8 architecture allowed for improved detection of
+small and complex objects.
+7.3 Model Training and Testing
+The enhanced model was trained on the preprocessed dataset, focusing on iterative
+improvements.
+Class-specific performance analysis played a crucial role in guiding the fine-tuning of
+layers. By analyzing the performance of individual classes, adjustments were made to
+enhance the model's ability to distinguish between different categories effectively.
+Additionally, the model's accuracy was rigorously evaluated using metrics such as
+mean squared error and mean absolute error. These metrics provided valuable insights
+into the model's predictive performance, ensuring that errors were minimized and
+overall reliability was improved.
+7.4 Algorithm Integration and Simulation
+Post-training, algorithms for vehicle and helmet detection were integrated into the
+system. A signal-switching mechanism was added to optimize traffic control
+applications. Finally, a simulation of the entire system demonstrated its feasibility and
+effectiveness.
+This structured approach ensures robust development and deployment of the project,
+leveraging advanced methodologies in data preparation, neural network design, and
+real-world application simulation.
+37Chapter- 8 Algorithm
+Initialize constants:
+minGreenTime = 10 # Minimum green light duration (seconds)
+maxGreenTime = 120 # Maximum green light duration (seconds)
+averageTimeOfClass = {"Bus": 10, "Car": 5, "Motorcycle": 3, "Truck": 12}
+Function calculateGreenSignalTime(vehicleData, noOfLanes):
+greenSignalTime = 0
+For each vehicleClass in vehicleData:
+vehicleCount = vehicleData[vehicleClass]
+crossingTime = averageTimeOfClass[vehicleClass]
+greenSignalTime += (vehicleCount * crossingTime)
+greenSignalTime /= (noOfLanes + 1)
+Return max(minGreenTime, min(greenSignalTime, maxGreenTime))
+Main Loop:
+While system is active:
+For each direction in intersection:
+vehicleData = getVehicleDataFromDetectionModule(direction)
+noOfLanes = getLaneCount(direction)
+# Calculate green signal time for current direction
+greenSignalTime = calculateGreenSignalTime(vehicleData, noOfLanes)
+# Set green light for the current direction
+setGreenLight(direction, greenSignalTime)
+# Adjust red light timers for other directions
+adjustRedLightTimers(direction, greenSignalTime)
+# Wait for the green light duration
+sleep(greenSignalTime)
+38# Switch to yellow signal
+setYellowLight(direction, 3)
+sleep(3)
+End For
+End While
+Description:
+1. Inputs
+ Vehicle Detection Data: Received in JSON format from the detection module
+(e.g., {"Bus": 2, "Car": 5, "Motorcycle": 10, "Truck": 1}).
+ Number of Lanes: Determines how many vehicles can pass simultaneously,
+affecting the timer calculation.
+ Average Crossing Times: Predefined for each vehicle class based on regional
+traffic data (e.g., Bus: 10s, Car: 5s, Motorcycle: 3s, Truck: 12s).
+ Minimum and Maximum Green Time: Constraints to ensure fairness and
+prevent starvation (e.g., Min: 10s, Max: 120s).
+2. Steps
+ Initialization: Define constants like minGreenTime, maxGreenTime, and
+averageTimeOfClass for each vehicle type.
+ Dynamic Green Signal Timer Calculation: The number of vehicles of each
+type is multiplied by its respective average crossing time. The results are summed up
+and divided by the number of lanes plus one (noOfLanes + 1) to account for multi-lane
+39traffic flow. The calculated time is clamped within the minGreenTime and
+maxGreenTime range to avoid excessively short or long signals.
+ Signal Switching: Signals switch cyclically between directions to maintain an
+orderly pattern and avoid confusion among road users. The green light duration is
+dynamically assigned to the current direction, while red light durations are calculated
+for other directions.
+ Yellow Light Transition: A yellow light period of 3 seconds is introduced
+before switching signals to ensure a smooth transition and minimize accidents.
+ Continuous Operation: The algorithm runs in a loop, repeatedly adjusting
+timers and switching signals based on updated vehicle detection data.
+40Chapter- 9 Data Design
+9.1 Data Sources and Structure
+Our project utilizes three primary datasets to implement the smart traffic signal system
+with helmet detection:
+a) Vehicle Detection Dataset
+ Classes: Car, Bike, Truck, Bus, Van
+ Source: City Intersection | Computer Vision [6], Pak Bike Image Dataset [7]
+ Format: Annotated images in .csv format, later converted to YOLO format (.txt
+files with bounding box coordinates)
+ Output: Number of vehicles per category in each frame
+ Usage: Determines the traffic congestion level to adjust signal timing
+b) Helmet Detection Dataset
+ Classes: With Helmet, Without Helmet
+ Source: Rider, With Helmet, Without Helmet, Number Plate [8], Bike Helmet
+Detection Dataset (Survival Man) [9]
+ Format: YOLO format
+ Output: Detects riders without helmets
+ Usage: Identifies helmet violations, feeding into number plate recognition
+9.2 Data Storage
+All the datasets are stored on the local machine and Google Drive, then used in Google
+Colaboratory Notebook by mounting Google Drive.
+9.3 Data Processing Pipeline
+The preprocessing stage involves preparing the input images by applying various
+transformations. This includes resizing images to a standard dimension to ensure
+41consistency across the dataset, followed by normalization to scale pixel values for
+improved model performance. Additionally, data augmentation techniques such as
+flipping, rotation, and brightness adjustment are applied to enhance the diversity of the
+training data, making the model more robust to different real-world conditions.
+In the feature extraction phase, object detection techniques are employed to identify
+and classify vehicles and helmets within the captured images. This step is crucial for
+analyzing traffic flow and assessing helmet usage among motorcyclists. Furthermore,
+traffic density estimation is performed based on the number of detected objects,
+providing essential data for optimizing traffic signal control.
+The algorithm development stage focuses on implementing adaptive traffic signal
+control, which dynamically adjusts signal timings based on real-time traffic density
+data to improve traffic flow efficiency. Additionally, a helmet violation detection
+mechanism is integrated, identifying motorcyclists without helmets and extracting their
+number plates for further processing. This automated approach enhances road safety by
+enabling enforcement of helmet-wearing regulations.
+9.4 Dataset Evaluation and Benchmarking
+To validate performance, 80% of the images are used for training YOLO models, while
+the remaining 20% are allocated for testing to evaluate detection performance. The
+results are further benchmarked against public datasets such as COCO and the Kaggle
+Helmet Detection dataset to ensure accuracy and reliability.
+Evaluation metrics include Mean Average Precision (mAP) to assess overall model
+performance, along with Precision and Recall to measure the balance between correctly
+identified detections and missed or incorrect classifications. Additionally, Intersection
+over Union (IoU) is used to evaluate the accuracy of bounding box predictions by
+comparing the overlap between predicted and ground truth boxes.
+429.5 Model Evaluation and Validation Strategy
+To evaluate the performance of our custom-trained YOLOv8 model, we adopted a
+training-validation split approach. Given the nature of YOLO models, which require
+extensive computational resources for large image datasets, this method provided an
+efficient balance between training accuracy and validation reliability.
+For implementation, we utilized two datasets: the vehicle detection dataset from
+Maryam Boneh's GitHub repository and the helmet detection dataset from Kaggle. The
+dataset was divided into training and validation subsets, ensuring an effective
+evaluation process while maintaining a representative validation set.
+During model training and evaluation, the YOLOv8 model was fine-tuned using the
+training dataset and validated on a predefined validation set. Performance metrics such
+as mean Average Precision (mAP), Precision, and Recall were recorded to assess the
+model's accuracy. The final performance score was derived based on validation set
+results, providing a clear measure of the model's effectiveness.
+This validation approach ensured that our YOLOv8 model performed consistently on
+unseen data, providing a reliable estimate of its effectiveness before deployment. The
+chosen method was computationally efficient while maintaining strong generalization
+for the Smart Traffic Signals with Helmet Detection system.
+43Chapter- 10 Implementation
+10.1 Algorithm
+The core of this project revolves around two major algorithms: Vehicle
+Detection and Helmet Detection, which work in tandem to control traffic
+signals. These algorithms are based on YOLOv8, a real-time object
+detection algorithm.
+Vehicle Detection Algorithm
+The vehicle detection algorithm is responsible for detecting various types
+of vehicles at a traffic intersection. The YOLOv8 model is trained on a
+custom dataset that includes different vehicle types such as motorcycles,
+cars, buses, and trucks. Once the vehicles are detected, the system
+calculates traffic density and adjusts the signal timing accordingly.
+Pseudocode for Vehicle Detection Algorithm:
+1. Load YOLOv8 model trained on the vehicle dataset.
+2. Capture video feed from traffic camera.
+3. For each frame:
+a. Preprocess the frame (resize, normalize).
+b. Run YOLOv8 model for vehicle detection.
+c. Count the number of detected vehicles.
+d. Classify vehicles into categories (motorcycle, car, bus, truck).
+4. Calculate traffic density based on vehicle count.
+5. Adjust traffic signal duration based on density:
+a. Low density: Short green time.
+b. Medium density: Medium green time.
+c. High density: Long green time.
+44Helmet Detection Algorithm
+The helmet detection algorithm detects riders without helmets in the
+motorcycle category. When a helmetless rider is detected, the system saves
+the image as a violation.
+Pseudocode for Helmet Detection Algorithm:
+1. Load YOLOv8 model trained on the helmet detection dataset.
+2. Capture video feed from traffic camera.
+3. For each motorcycle detection:
+a. Check if rider is wearing a helmet.
+b. If no helmet is detected:
+i. Save the image as a violation.
+ii. Store the image in the violation directory.
+4510.2 External APIs
+This project utilizes a few APIs for image handling and simulation. Below
+is a summary of the APIs used:
+Name of Description of Purpose of Function/Class in which it is
+API API usage used
+Pre-trained Used for
+YOLOv8 class in
+model for vehicle and
+YOLOv8 vehicle_detection.py,
+object helmet
+helmet_detection.py
+detection. detection.
+Open Source Used for
+Computer image
+cv2.VideoCapture(),
+OpenCV Vision library capture,
+cv2.resize(), cv2.imshow()
+for image resizing, and
+processing. processing.
+A set of
+Python Used for
+modules simulating the pygame.display.set_mode(),
+Pygame
+designed for signal control pygame.draw.rect()
+writing video system.
+games.
+Table 6 External APIs
+46Chapter- 11 Model Evaluation
+i.Quantitative results:
+The quantitative results of the model's performance indicate a precision of 90%,
+demonstrating its ability to correctly identify positive instances with a high degree of
+accuracy. The recall is measured at 70%, reflecting the model’s capability to detect
+relevant instances, though some positives may be missed. The mean Average Precision
+(mAP) at a 0.5 Intersection over Union (IoU) threshold is 80%, showcasing strong
+overall detection performance. Additionally, the mAP at a stricter 0.95 IoU threshold
+is 69%, indicating the model's effectiveness in making accurate predictions across
+varying levels of precision.
+Figure 5 Results
+47Figure 6 Confusion Matrix Normalized
+Figure 7 Confusion Matrix
+48Figure 8 F1-Confidence Curve
+Figure 9 Labels Correlogram
+49Figure 10 Labels
+50Figure 11 P Curve
+Figure 12 PR Curve
+51Figure 13 R Curve
+52Figure 14 tain_batch0
+53Figure 15 train_batch1
+54Figure 16 train_batch2
+55Figure 17 train_batch2709
+56Figure 18 train_batch2791
+57Figure 19 train_batch2792
+58Figure 20 val_batch0_labels
+59Figure 21 val_batch0_pred
+60Figure 22 val_batch1_labels
+61Figure 23 val_batch1_pred
+62Figure 24 val_batch2_labels
+63Figure 25 val_batch2_pred
+64ii. Quantitative results:
+Qualitative evaluation involved testing the model on unseen data. The
+model accurately detected and classified vehicles across diverse scenarios,
+including varying lighting conditions and occlusions.
+Figure 26 Vehicle Detection
+65Figure 27 Helmet Detection
+66Simulations:
+Figure 28 Simulation West
+67Figure 29 Simulation East
+68Figure 30 Simulation North
+69Figure 31 Simulation South
+70Figure 32 Intersection Simulation
+71Chapter- 12 Conclusion and Future Work
+Conclusion:
+This project successfully integrates vehicle detection, helmet detection, and adaptive
+signal switching to optimize traffic flow at intersections. Using YOLOv8 for real-time
+object detection, the system can identify various vehicle types, classify them, and detect
+violations such as motorcyclists without helmets. The traffic signal timing is
+dynamically adjusted based on vehicle density, enhancing the efficiency of traffic
+management. The simulation provided a visual representation of the system's
+functionality, showcasing real-time signal switching and violation detection.
+The system has the potential for real-world deployment, with further refinements in
+detection accuracy and computational performance. The helmet detection component
+enhances road safety by helping authorities enforce helmet laws more effectively. The
+adaptability of the system makes it a promising solution for urban traffic management,
+though several challenges remain.
+System Limitations and Challenges:
+The system faces several limitations and challenges that must be addressed for effective
+implementation. One key challenge is the limited dataset, as the model’s accuracy
+heavily depends on the quality and diversity of the training data. Unseen vehicle types,
+varying helmet styles, and poor lighting conditions may reduce detection accuracy.
+Another significant constraint is real-time performance, as processing high-resolution
+video feeds efficiently requires optimized models and powerful hardware. This can be
+a limitation when scaling the system for large-scale deployment. Additionally, the
+quality and positioning of cameras play a crucial role in detection performance.
+Variations in camera angles, image resolution, and environmental conditions can affect
+the accuracy of detections, making proper camera placement essential. Integration with
+existing traffic control systems also presents challenges. While the algorithm functions
+effectively in a simulated environment, real-world deployment would require
+overcoming obstacles such as sensor calibration, hardware compatibility, and
+synchronization with current traffic infrastructure. Furthermore, scalability remains a
+72concern, as expanding the system to multiple intersections in a large city would demand
+extensive hardware and software resources.
+Future Work
+Future work aims to enhance the system’s effectiveness and adaptability. One of the
+key areas for improvement is real-world deployment and testing. Deploying the system
+at actual intersections with live camera feeds will allow for real-time vehicle detection
+and traffic control, improving robustness through testing in diverse environmental
+conditions. Another crucial step is expanding the dataset to improve accuracy by
+including a wider range of vehicle types, helmet variations, lighting conditions, and
+weather scenarios. Integrating the system with urban traffic management frameworks
+will enable real-time traffic monitoring and automated signal adjustments based on live
+data. Additionally, a mobile application could be developed to facilitate the reporting
+of helmet violations and other traffic infractions by citizens and law enforcement
+agencies, streamlining enforcement procedures. Implementing edge computing for
+faster processing can also enhance system efficiency. By shifting some of the
+processing workload to traffic cameras instead of relying solely on centralized servers,
+latency can be reduced, ensuring improved real-time performance.
+By addressing these challenges and incorporating the proposed future developments,
+this project has the potential to significantly enhance traffic flow and safety at
+intersections.
+73References
+[1] Khushi, "Smart Control of Traffic Light System using Image Processing," 2017
+International Conference on Current Trends in Computer, Electrical, Electronics
+and Communication (CTCEEC), Mysore, 2017, pp. 99-103, doi:
+10.1109/CTCEEC.2017.8454966.
+[2] A. A. Zaid, Y. Suhweil and M. A. Yaman, "Smart controlling for traffic light
+time," 2017 IEEE Jordan Conference on Applied Electrical Engineering and
+Computing Technologies (AEECT), Aqaba, 2017, pp. 1-5, doi:
+10.1109/AEECT.2017.8257768.
+[3] A. Kanungo, A. Sharma and C. Singla, "Smart traffic lights switching and traffic
+density calculation using video processing," 2014 Recent Advances in Engineering
+and Computational Sciences (RAECS), Chandigarh, 2014, pp. 1-6, doi:
+10.1109/RAECS.2014.6799542.
+[4] Ms. Saili Shinde, Prof. Sheetal Jagtap, Vishwakarma Institute Of Technology,
+Intelligent traffic management system:a Review, IJIRST 2016
+[5] Belinda Chong Chiew Meng et al 2021 IOP Conf. Ser.: Mater. Sci. Eng. 1088
+012021
+[6] Momeni, M. (2024). City intersection | Computer vision [Data set]. Kaggle.
+https://www.kaggle.com/datasets/imtkaggleteam/city-intersection-computer-vision
+[7] Rehman, M. A. (2024). Pak bike image dataset [Data set]. Kaggle.
+https://www.kaggle.com/datasets/mohidabdulrehman/pak-bike-image-dataset
+[8] Aro M, A. (2024). Rider, with helmet, without helmet, number plate [Data set].
+Kaggle. https://www.kaggle.com/datasets/aneesarom/rider-with-helmet-without-
+helmet-number-plate
+[9] Survival Man. (2024). Bike helmet detection dataset [Data set]. Kaggle.
+https://www.kaggle.com/datasets/survivalman/bike-helmet-detection-3735
+74[10] Ultralytics. (2023). YOLOv8: The Latest Evolution of YOLO for Real-Time
+Object Detection. Retrieved from https://github.com/ultralytics/yolov8
+[11] Ren, S., He, K., Girshick, R., & Sun, J. (2015). Faster R-CNN: Towards Real-
+Time Object Detection with Region Proposal Networks. In Advances in Neural
+Information Processing Systems, 91-99. Available at:
+[https://arxiv.org/abs/1506.01497].
+[12] Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.Y., & Berg,
+A.C. (2016). SSD: Single Shot MultiBox Detector. In European Conference on
+Computer Vision, 21-37. Available at: [https://arxiv.org/abs/1512.02325].
+75APPENDICES
+APPENDIX A – SDG
+Attainable SDG’s from the above mentioned FYP:
+1 No Poverty
+2 Zero Hunger
+3 Good Health and Well-Being 
+4 Quality Education
+5 Gender Equality
+6 Clean Water and Sanitation
+7 Affordable and Clean Energy
+8 Decent Work and Economic Work 
+10 Industry, Innovation and Infrastructure 
+11 Reduced Inequality
+12 Sustainable Cities and Communities 
+13 Climate Action 
+14 Life Below Water
+15 Life on Land
+16 Peace, Justice and Strong Institutions
+17 Partnerships for the Goals 
+Table 7 SDG
+Brief Overview of SDG’s Attainment:
+1. Good Health and Well-being (SDG 3) – The system promotes road safety by
+detecting helmetless riders and enabling enforcement agencies to take necessary
+action, reducing the risk of fatal accidents.
+2. Sustainable Cities and Communities (SDG 12) – The adaptive traffic control
+system enhances urban mobility, reducing congestion and improving
+transportation efficiency.
+3. Industry, Innovation, and Infrastructure (SDG 10) – The project integrates AI-
+based real-time detection with smart traffic management, fostering innovation in
+intelligent transport systems.
+4. Climate Action (SDG 13) – By reducing vehicle idle times and congestion, the
+project indirectly lowers carbon emissions, contributing to a cleaner environment.
+765. Decent Work and Economic Growth (SDG 8) – The deployment of AI-powered
+traffic systems creates job opportunities in the fields of computer vision, urban
+planning, and law enforcement automation.
+6. Partnerships for the Goals (SDG 17) – The project fosters collaboration between
+government traffic authorities, urban developers, and AI researchers to implement
+efficient traffic solutions.
+APPENDIX B – CCP
+WP’s How it is addressed in this Project
+WP1: Depth of Kn owledge Required Advanced computing know ledge in computer vision,
+deep learning (YOLOv8), and real-time object
+detection is necessary for system implementation.
+The project also requires domain expertise in traffic
+control systems and law enforcement regulations.
+WP2: Range of Conflicting Requirements The system must balance multiple requirements,
+such as maintaining high accuracy in helmet and
+vehicle detection while ensuring low-latency
+performance for real-time traffic decision-making.
+Additionally, it must align with existing traffic
+management policies.
+WP3: Depth of Analysis Required The project involves complex real-world scenarios
+where traffic flow analysis, object detection, and
+automated decision-making must work together. It
+requires optimization techniques to ensure efficient
+resource utilization.
+WP4: Familiarity with Issues The system must account for various environmental
+conditions, such as poor lighting, heavy traffic, and
+different camera angles, which could affect detection
+accuracy. Addressing these challenges requires
+expertise in image preprocessing and model fine-
+tuning.
+WP5: Extent of Applicable Codes The project follows best practices in AI model
+deployment, including compliance with real-time
+video processing constraints, data privacy
+regulations, and software engineering principles for
+scalability.
+WP6: Extent of Stakeholder Involvement and The project requires collaboration with multiple
+Conflicting Requirements stakeholders, such as city traffic authorities, law
+enforcement, and urban planners, each with their
+own requirements for safety, efficiency, and legal
+enforcement.
+WP7: Interdependence The system integrates multiple technologies,
+including YOLO-based vehicle and helmet detection,
+traffic signal control algorithms, and a database for
+violation records. These components must work
+seamlessly to ensure a functional and reliable smart
+traffic management system.
+Table 8 CCP
+77APPENDIX C – CODE
+ Model Training
+import os
+import pandas as pd
+# Paths
+csv_file =
+"/content/drive/MyDrive/FYP/crazyDataset/valid_annot
+ations.csv"
+labels_folder =
+"/content/drive/MyDrive/FYP/nlabelsValid"
+os.makedirs(labels_folder, exist_ok=True)
+# Load CSV
+df = pd.read_csv(csv_file)
+class_mapping = {"bus": 0, "car": 1, "jeepney": 2,
+"motorcycle": 3, "tricycle": 4, "truck": 5, "van": 6
+}
+# Process each image
+for image_name in df["filename"].unique():
+annotations = df[df["filename"] == image_name]
+label_file_path = os.path.join(labels_folder,
+image_name.replace(".jpg", ".txt"))
+with open(label_file_path, "w") as f:
+for _, row in annotations.iterrows():
+class_id = class_mapping[row["class"]]
+img_w, img_h = row["width"],
+row["height"]
+x_min, y_min, x_max, y_max =
+row["xmin"], row["ymin"], row["xmax"], row["ymax"]
+# Convert to YOLO format (normalized
+values)
+78x_center = (x_min + x_max) / 2 / img_w
+y_center = (y_min + y_max) / 2 / img_h
+width = (x_max - x_min) / img_w
+height = (y_max - y_min) / img_h
+# Write annotation in YOLO format
+f.write(f"{class_id} {x_center:.6f}
+{y_center:.6f} {width:.6f} {height:.6f}\n")
+print("✅ Conversion complete! YOLO labels saved
+in:", labels_folder)
+import shutil
+import os
+def move_files(source_folder, destination_folder):
+if not os.path.exists(source_folder):
+print(f"Error: Source folder
+'{source_folder}' does not exist.")
+return
+if not os.path.exists(destination_folder):
+os.makedirs(destination_folder)
+print(f"Created destination folder
+'{destination_folder}'")
+for filename in os.listdir(source_folder):
+source_path = os.path.join(source_folder,
+filename)
+destination_path =
+os.path.join(destination_folder, filename)
+if os.path.isfile(source_path):
+try:
+shutil.move(source_path,
+destination_folder)
+79print(f"Moved '{filename}' to
+'{destination_folder}'")
+except Exception as e:
+print(f"Error moving '{filename}':
+{e}")
+else:
+print(f"Skipping '{filename}' (not a
+file)")
+source_folder =
+"/content/drive/MyDrive/FYP/nhelmetvalid/labels"
+destination_folder =
+"/content/drive/MyDrive/FYP/crazyDataset/dataset2/va
+lid/labels"
+move_files(source_folder, destination_folder)
+import os
+import shutil
+labels_folder =
+"/content/drive/MyDrive/FYP/aio/valid/labels"
+images_folder =
+"/content/drive/MyDrive/FYP/aio/valid/images"
+output_labels_folder =
+"/content/drive/MyDrive/FYP/nhelmetvalid/labels"
+output_images_folder =
+"/content/drive/MyDrive/FYP/nhelmetvalid/images"
+os.makedirs(output_labels_folder, exist_ok=True)
+os.makedirs(output_images_folder, exist_ok=True)
+# Class mapping
+class_mapping = {4: 7, 5: 8}
+# Process each label file
+for label_file in os.listdir(labels_folder):
+if not label_file.endswith(".txt"):
+continue
+80input_label_path = os.path.join(labels_folder,
+label_file)
+output_label_path =
+os.path.join(output_labels_folder, label_file)
+# Read and filter label file
+new_lines = []
+with open(input_label_path, "r") as f:
+for line in f:
+parts = line.strip().split()
+class_id = int(parts[0])
+if class_id in class_mapping:
+# Modify class label
+parts[0] =
+str(class_mapping[class_id])
+new_lines.append(" ".join(parts))
+if new_lines:
+with open(output_label_path, "w") as f:
+f.write("\n".join(new_lines) + "\n")
+image_name = label_file.replace(".txt",
+".jpg")
+input_image_path =
+os.path.join(images_folder, image_name)
+output_image_path =
+os.path.join(output_images_folder, image_name)
+if os.path.exists(input_image_path):
+shutil.copy(input_image_path,
+output_image_path)
+print("✅ Extraction and label modification
+complete!")
+import os
+81import cv2
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+from tqdm import tqdm
+import shutil
+def augment_helmet_data(base_dir, output_dir):
+image_dir = os.path.join(base_dir, 'images')
+label_dir = os.path.join(base_dir, 'labels')
+output_image_dir = os.path.join(output_dir,
+'images')
+output_label_dir = os.path.join(output_dir,
+'labels')
+os.makedirs(output_image_dir, exist_ok=True)
+os.makedirs(output_label_dir, exist_ok=True)
+# Define augmentation pipeline
+augmentations = A.Compose([
+A.HorizontalFlip(p=0.5),
+A.RandomBrightnessContrast(brightness_limit=0.2,
+contrast_limit=0.2, p=0.5),
+A.ShiftScaleRotate(shift_limit=0.1,
+scale_limit=0.1, rotate_limit=15, p=0.5),
+A.CoarseDropout(max_holes=4, max_height=30,
+max_width=30, min_holes=1, fill_value=0, p=0.5),
+], bbox_params=A.BboxParams(format='yolo',
+label_fields=['class_labels']))
+for filename in tqdm(os.listdir(image_dir)):
+if filename.endswith(('.jpg', '.png',
+'.jpeg')):
+base_name =
+os.path.splitext(filename)[0]
+image_path = os.path.join(image_dir,
+filename)
+82label_path = os.path.join(label_dir,
+base_name + '.txt')
+if not os.path.exists(label_path):
+continue
+image = cv2.imread(image_path)
+if image is None:
+print(f"Warning: Failed to load
+{image_path}")
+continue
+with open(label_path, 'r') as f:
+lines = f.readlines()
+bboxes = []
+class_labels = []
+for line in lines:
+cls, x, y, w, h = map(float,
+line.strip().split())
+if int(cls) in [5, 6, 7, 8]: #
+Helmet-related classes
+bboxes.append([x, y, w, h])
+class_labels.append(int(cls))
+if not bboxes:
+continue
+# Apply augmentation
+augmented = augmentations(image=image,
+bboxes=bboxes, class_labels=class_labels)
+aug_image = augmented['image']
+aug_bboxes = augmented['bboxes']
+aug_class_labels =
+augmented['class_labels']
+# Save augmented image
+83aug_image_path =
+os.path.join(output_image_dir, f'aug_{filename}')
+cv2.imwrite(aug_image_path, aug_image)
+# Save augmented labels
+aug_label_path =
+os.path.join(output_label_dir,
+f'aug_{base_name}.txt')
+with open(aug_label_path, 'w') as f:
+for cls, (x, y, w, h) in
+zip(aug_class_labels, aug_bboxes):
+f.write(f"{cls} {x} {y} {w}
+{h}\n")
+base_dir = "/content/drive/MyDrive/FYP/Cars
+Detection/train"
+output_dir = "/content/drive/MyDrive/FYP/Cars
+Detection"
+# Augment helmet-related data
+augment_helmet_data(base_dir, output_dir)
+"""# MODEL TRAINING"""
+!pip install ultralytics --upgrade
+import torch
+import torch.nn as nn
+from ultralytics import YOLO
+class LSKA(nn.Module):
+def __init__(self, in_channels):
+super(LSKA, self).__init__()
+self.conv1 = nn.Conv2d(in_channels,
+in_channels, kernel_size=(1, 9), padding=(0, 4),
+groups=in_channels)
+84self.conv2 = nn.Conv2d(in_channels,
+in_channels, kernel_size=(9, 1), padding=(4, 0),
+groups=in_channels)
+self.sigmoid = nn.Sigmoid()
+def forward(self, x):
+attention = self.conv1(x)
+attention = self.conv2(attention)
+return x * self.sigmoid(attention)
+class SPPF_LSKA(nn.Module):
+def __init__(self, in_channels, out_channels,
+kernel_size=5):
+super(SPPF_LSKA, self).__init__()
+self.conv1 = nn.Conv2d(in_channels,
+out_channels, 1, 1)
+self.conv2 = nn.Conv2d(out_channels,
+out_channels, kernel_size, 1, kernel_size // 2)
+self.conv3 = nn.Conv2d(out_channels,
+out_channels, kernel_size, 1, kernel_size // 2)
+self.conv4 = nn.Conv2d(out_channels,
+out_channels, kernel_size, 1, kernel_size // 2)
+self.lska = LSKA(out_channels)
+self.conv5 = nn.Conv2d(out_channels * 4,
+out_channels, 1, 1)
+def forward(self, x):
+x = self.conv1(x)
+y1 = self.conv2(x)
+y2 = self.conv3(y1)
+y3 = self.conv4(y2)
+x = torch.cat([x, y1, y2, y3], 1)
+x = self.conv5(x)
+return self.lska(x)
+class STE_Neck(nn.Module):
+def __init__(self, in_channels_list,
+out_channels):
+85super(STE_Neck, self).__init__()
+self.upsample1 = nn.Upsample(scale_factor=2,
+mode="nearest")
+self.conv1 = nn.Conv2d(in_channels_list[0],
+out_channels, 1, 1)
+self.conv2 = nn.Conv2d(in_channels_list[1],
+out_channels, 1, 1)
+self.conv3 = nn.Conv2d(out_channels * 2,
+out_channels, 3, 1, 1)
+self.conv4 = nn.Conv2d(out_channels,
+out_channels, 3, 1, 1)
+def forward(self, x1, x2):
+x1 = self.upsample1(x1)
+x2 = self.conv1(x2)
+x1 = self.conv2(x1)
+x = torch.cat([x1, x2], 1)
+x = self.conv3(x)
+return self.conv4(x)
+from collections import Counter
+import os
+labels_path =
+'/content/drive/MyDrive/FYP/crazyDataset/dataset2/tr
+ain/labels'
+# Counter for class distribution
+class_distribution = Counter()
+# Iterate through all label files
+for label_file in os.listdir(labels_path):
+if label_file.endswith('.txt'): # Process only
+text files
+with open(os.path.join(labels_path,
+label_file), 'r') as f:
+for line in f:
+if line.strip(): # Skip empty lines
+86class_id = line.split()[0] #
+Extract the class ID (first element)
+class_distribution[class_id] +=
+1
+print("Class Distribution:", class_distribution)
+class_counts = torch.tensor([97, 14719, 123, 658, 1,
+213, 781, 286, 818])
+total_samples = class_counts.sum()
+class_weights = total_samples / class_counts
+class_weights = class_weights / class_weights.sum()
+class CustomYOLO(YOLO):
+def compute_loss(self, preds, targets):
+base_loss, components =
+super().compute_loss(preds, targets)
+# Weighted classification loss
+classification_loss = components[0]
+class_ids = targets[:, 1].long()
+weights =
+class_weights[class_ids].to(classification_loss.devi
+ce)
+weighted_classification_loss =
+(classification_loss * weights).mean()
+components[0] = weighted_classification_loss
+total_loss = sum(components)
+return total_loss, components
+checkpoint_path = "yolov8n.pt"
+pretrained_model = YOLO(checkpoint_path)
+custom_model = CustomYOLO(checkpoint_path)
+custom_model.train(
+87data="/content/drive/MyDrive/FYP/crazyDataset/datase
+t2/data2.yaml",
+epochs=100,
+batch=64,
+lr0=1e-5,
+project="/content/drive/MyDrive/FYP/crazyDataset/dat
+aset2/finetuned_model",
+name="custom_yolo_finetuned",
+device=0
+)
+ Simulation 1
+import os
+import pygame
+from time import sleep
+from ultralytics import YOLO
+from PIL import Image
+pygame.init()
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 800
+screen = pygame.display.set_mode((SCREEN_WIDTH,
+SCREEN_HEIGHT))
+88pygame.display.set_caption("Traffic Signal
+Simulation")
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
+font = pygame.font.Font(None, 36)
+model =
+YOLO("/Users/my/Desktop/FYP2/custom_yolo_finetuned2/
+weights/best.pt")
+#
+minGreenTime = 10 # Minimum green light duration
+(seconds)
+maxGreenTime = 120 # Maximum green light duration
+(seconds)
+averageTimeOfClass = {"bus": 10, "car": 10,
+"jeepney": 6, "motorcycle": 3, "tricycle": 4,
+"truck": 12, "van": 7}
+trafficDensityWeight = {"Low": 1, "Medium": 1.5,
+"High": 2} # Density weight categories
+helmetless_dir = "/Users/my/Desktop/FYP2/helmetV"
+os.makedirs(helmetless_dir, exist_ok=True)
+def calculateTrafficDensityWeight(vehicleCount,
+laneCapacity):
+density = vehicleCount / laneCapacity
+if density < 0.83:
+return "Low"
+elif density < 1.67:
+return "Medium"
+else:
+return "High"
+89def calculateGreenSignalTime(vehicleData, noOfLanes,
+laneCapacity):
+totalWeightedTime = sum(vehicleData.get(v, 0) *
+averageTimeOfClass.get(v, 5) for v in vehicleData)
+densityCategory =
+calculateTrafficDensityWeight(sum(vehicleData.values
+()), laneCapacity)
+densityWeight =
+trafficDensityWeight[densityCategory]
+return max(minGreenTime, min((totalWeightedTime
+* densityWeight) / (noOfLanes + 1), maxGreenTime))
+def draw_signal_with_timer(direction, color,
+remaining_time):
+positions = {"West": (100, SCREEN_HEIGHT // 2),
+"East": (700, SCREEN_HEIGHT // 2), "North":
+(SCREEN_WIDTH // 2, 100), "South": (SCREEN_WIDTH //
+2, 700)}
+pos = positions[direction]
+pygame.draw.circle(screen, color, pos, 50)
+screen.blit(font.render(f"{int(remaining_time)}s",
+True, (0, 0, 0)), (pos[0] - 20, pos[1] - 70))
+def display_image(image_path, position):
+img = pygame.image.load(image_path)
+img = pygame.transform.scale(img, (300, 200))
+screen.blit(img, position)
+def process_detections(image_path, results,
+direction):
+vehicle_counts = {"bus": 0, "car": 0, "jeepney":
+0, "motorcycle": 0, "tricycle": 0, "truck": 0,
+"van": 0}
+helmet_violations = False
+with_helmet_count, without_helmet_count = 0, 0
+image = Image.open(image_path)
+violation_counter = 0
+90for box in results.boxes:
+cls_name = results.names[int(box.cls)]
+confidence = box.conf.item()
+xyxy = box.xyxy.tolist()[0]
+scale_x = 300 / image.width
+scale_y = 200 / image.height
+scaled_xyxy = [xyxy[0] * scale_x + 250,
+xyxy[1] * scale_y + 300, xyxy[2] * scale_x + 250,
+xyxy[3] * scale_y + 300]
+pygame.draw.rect(screen, (0, 255, 0),
+(scaled_xyxy[0], scaled_xyxy[1], scaled_xyxy[2] -
+scaled_xyxy[0], scaled_xyxy[3] - scaled_xyxy[1]), 2)
+screen.blit(font.render(f"{cls_name}
+{confidence:.2f}", True, (0, 255, 0)),
+(scaled_xyxy[0], scaled_xyxy[1] - 20))
+if cls_name in vehicle_counts:
+vehicle_counts[cls_name] += 1
+if cls_name == "without helmet":
+helmet_violations = True
+without_helmet_count += 1
+violation_counter += 1
+cropped_region = image.crop(map(int,
+xyxy))
+save_path = os.path.join(helmetless_dir,
+f"{direction}_helmet_violation_{violation_counter}_{
+os.path.basename(image_path)}")
+cropped_region.save(save_path)
+if cls_name == "with helmet":
+with_helmet_count += 1
+vehicle_counts["Motorcycle"] = with_helmet_count
++ without_helmet_count
+return vehicle_counts
+91def display_calculations(vehicle_data,
+green_signal_time, direction, density_category):
+# Display traffic signal calculations
+for idx, text in enumerate([f"Direction:
+{direction}", f"Traffic Density:
+{density_category}", f"Green Signal Time:
+{green_signal_time:.2f} s"]):
+screen.blit(font.render(text, True, (0, 0,
+0)), (20, 120 + idx * 40))
+# Display vehicle counts at the bottom of the
+screen
+y_offset = SCREEN_HEIGHT - 200
+for vehicle, count in vehicle_data.items():
+screen.blit(font.render(f"{vehicle}:
+{count}", True, (0, 0, 0)), (20, y_offset))
+y_offset += 40
+def main():
+iteration_images = [
+{"West":
+"/Users/my/Desktop/FYP2/timages/p10.png", "East":
+"/Users/my/Desktop/FYP2/timages/p4.jpg", "North":
+"/Users/my/Desktop/FYP2/timages/p8.jpg", "South":
+"/Users/my/Desktop/FYP2/timages/p2.jpg"},
+{"West":
+"/Users/my/Desktop/FYP2/timages/p6.jpg", "East":
+"/Users/my/Desktop/FYP2/timages/p3.jpg", "North":
+"/Users/my/Desktop/FYP2/timages/p5.jpg", "South":
+"/Users/my/Desktop/FYP2/timages/p7.jpg"}
+]
+for iteration, image_set in
+enumerate(iteration_images, start=1):
+print(f"\n--- Iteration {iteration} ---")
+for direction, image_path in
+image_set.items():
+results = model(image_path)[0]
+92vehicle_counts =
+process_detections(image_path, results, direction)
+green_signal_time =
+calculateGreenSignalTime(vehicle_counts, 4, 6)
+density_category =
+calculateTrafficDensityWeight(sum(vehicle_counts.val
+ues()), 6)
+running, start_time, signal_state =
+True, pygame.time.get_ticks(), "green"
+green_time_remaining,
+yellow_time_remaining, red_time_remaining =
+green_signal_time, 2, 5
+while running:
+for event in pygame.event.get():
+if event.type == pygame.QUIT:
+running = False
+screen.fill(WHITE)
+if signal_state == "green":
+draw_signal_with_timer(direction, GREEN,
+green_time_remaining)
+green_time_remaining =
+green_signal_time - (pygame.time.get_ticks() -
+start_time) / 1000
+if green_time_remaining <= 0:
+signal_state, start_time =
+"yellow", pygame.time.get_ticks()
+elif signal_state == "yellow":
+draw_signal_with_timer(direction, YELLOW,
+yellow_time_remaining)
+yellow_time_remaining -=
+(pygame.time.get_ticks() - start_time) / 1000
+if yellow_time_remaining <= 0:
+signal_state, start_time =
+"red", pygame.time.get_ticks()
+elif signal_state == "red":
+93red_time_remaining -=
+(pygame.time.get_ticks() - start_time) / 1000
+running = False
+display_image(image_path, (250,
+300))
+display_calculations(vehicle_counts,
+green_signal_time, direction, density_category)
+pygame.display.flip()
+pygame.time.wait(1000)
+pygame.quit()
+main()
+ Simulation 2
+import random
+import math
+import time
+import threading
+import pygame
+import sys
+import os
+defaultRed = 150
+defaultYellow = 5
+defaultGreen = 20
+defaultMinimum = 10
+defaultMaximum = 60
+signals = []
+noOfSignals = 4
+94simTime = 300
+timeElapsed = 0
+currentGreen = 0
+nextGreen = (currentGreen+1)%noOfSignals
+currentYellow = 0
+carTime = 2
+bikeTime = 1
+rickshawTime = 2.25
+busTime = 2.5
+truckTime = 2.5
+noOfCars = 0
+noOfBikes = 0
+noOfBuses =0
+noOfTrucks = 0
+noOfRickshaws = 0
+noOfLanes = 2
+detectionTime = 5
+speeds = {'car':2.25, 'bus':1.8, 'truck':1.8,
+'rickshaw':2, 'bike':2.5} # average speeds of
+vehicles
+# Coordinates of start
+x = {'right':[0,0,0], 'down':[755,727,697],
+'left':[1400,1400,1400], 'up':[602,627,657]}
+y = {'right':[348,370,398], 'down':[0,0,0],
+'left':[498,466,436], 'up':[800,800,800]}
+vehicles = {'right': {0:[], 1:[], 2:[],
+'crossed':0}, 'down': {0:[], 1:[], 2:[],
+'crossed':0}, 'left': {0:[], 1:[], 2:[],
+'crossed':0}, 'up': {0:[], 1:[], 2:[], 'crossed':0}}
+vehicleTypes = {0:'car', 1:'bus', 2:'truck',
+3:'rickshaw', 4:'bike'}
+95directionNumbers = {0:'right', 1:'down', 2:'left',
+3:'up'}
+# Coordinates of signal image, timer, and vehicle
+count
+signalCoods =
+[(530,230),(810,230),(810,570),(530,570)]
+signalTimerCoods =
+[(530,210),(810,210),(810,550),(530,550)]
+vehicleCountCoods =
+[(480,210),(880,210),(880,550),(480,550)]
+vehicleCountTexts = ["0", "0", "0", "0"]
+# Coordinates of stop lines
+stopLines = {'right': 590, 'down': 330, 'left': 800,
+'up': 535}
+defaultStop = {'right': 580, 'down': 320, 'left':
+810, 'up': 545}
+stops = {'right': [580,580,580], 'down':
+[320,320,320], 'left': [810,810,810], 'up':
+[545,545,545]}
+mid = {'right': {'x':705, 'y':445}, 'down':
+{'x':695, 'y':450}, 'left': {'x':695, 'y':425},
+'up': {'x':695, 'y':400}}
+rotationAngle = 3
+# Gap between vehicles
+gap = 15 # stopping gap
+gap2 = 15 # moving gap
+pygame.init()
+simulation = pygame.sprite.Group()
+class TrafficSignal:
+def __init__(self, red, yellow, green, minimum,
+maximum):
+self.red = red
+96self.yellow = yellow
+self.green = green
+self.minimum = minimum
+self.maximum = maximum
+self.signalText = "30"
+self.totalGreenTime = 0
+class Vehicle(pygame.sprite.Sprite):
+def __init__(self, lane, vehicleClass,
+direction_number, direction, will_turn):
+pygame.sprite.Sprite.__init__(self)
+self.lane = lane
+self.vehicleClass = vehicleClass
+self.speed = speeds[vehicleClass]
+self.direction_number = direction_number
+self.direction = direction
+self.x = x[direction][lane]
+self.y = y[direction][lane]
+self.crossed = 0
+self.willTurn = will_turn
+self.turned = 0
+self.rotateAngle = 0
+vehicles[direction][lane].append(self)
+self.index = len(vehicles[direction][lane])
+- 1
+path =
+f"/Users/my/Desktop/FYP2/darkflow/images/{direction}
+/{vehicleClass}.png" # Ensure this path is correct
+self.originalImage = pygame.image.load(path)
+self.currentImage = pygame.image.load(path)
+if direction == 'right':
+if len(vehicles[direction][lane]) > 1
+and vehicles[direction][lane][self.index -
+1].crossed == 0:
+self.stop =
+vehicles[direction][lane][self.index - 1].stop -
+97vehicles[direction][lane][self.index -
+1].currentImage.get_rect().width - gap
+else:
+self.stop = defaultStop[direction]
+temp =
+self.currentImage.get_rect().width + gap
+x[direction][lane] -= temp
+stops[direction][lane] -= temp
+elif direction == 'left':
+if len(vehicles[direction][lane]) > 1
+and vehicles[direction][lane][self.index -
+1].crossed == 0:
+self.stop =
+vehicles[direction][lane][self.index - 1].stop +
+vehicles[direction][lane][self.index -
+1].currentImage.get_rect().width + gap
+else:
+self.stop = defaultStop[direction]
+temp =
+self.currentImage.get_rect().width + gap
+x[direction][lane] += temp
+stops[direction][lane] += temp
+elif direction == 'down':
+if len(vehicles[direction][lane]) > 1
+and vehicles[direction][lane][self.index -
+1].crossed == 0:
+self.stop =
+vehicles[direction][lane][self.index - 1].stop -
+vehicles[direction][lane][self.index -
+1].currentImage.get_rect().height - gap
+else:
+self.stop = defaultStop[direction]
+temp =
+self.currentImage.get_rect().height + gap
+y[direction][lane] -= temp
+stops[direction][lane] -= temp
+elif direction == 'up':
+98if len(vehicles[direction][lane]) > 1
+and vehicles[direction][lane][self.index -
+1].crossed == 0:
+self.stop =
+vehicles[direction][lane][self.index - 1].stop +
+vehicles[direction][lane][self.index -
+1].currentImage.get_rect().height + gap
+else:
+self.stop = defaultStop[direction]
+temp =
+self.currentImage.get_rect().height + gap
+y[direction][lane] += temp
+stops[direction][lane] += temp
+simulation.add(self)
+def render(self, screen):
+screen.blit(self.currentImage, (self.x,
+self.y))
+def move(self):
+if self.direction == 'right':
+if self.crossed == 0 and self.x +
+self.currentImage.get_rect().width >
+stopLines[self.direction]:
+self.crossed = 1
+vehicles[self.direction]['crossed']
++= 1
+if self.willTurn == 1:
+if self.crossed == 0 or self.x +
+self.currentImage.get_rect().width <
+mid[self.direction]['x']:
+if (self.x +
+self.currentImage.get_rect().width <= self.stop or
+(currentGreen == 0 and currentYellow == 0) or
+self.crossed == 1) and (self.index == 0 or self.x +
+self.currentImage.get_rect().width <
+(vehicles[self.direction][self.lane][self.index -
+1].x - gap2) or
+99vehicles[self.direction][self.lane][self.index -
+1].turned == 1):
+self.x += self.speed
+else:
+if self.turned == 0:
+self.rotateAngle +=
+rotationAngle
+self.currentImage =
+pygame.transform.rotate(self.originalImage, -
+self.rotateAngle)
+self.x += 2
+self.y += 1.8
+if self.rotateAngle == 90:
+self.turned = 1
+else:
+if self.index == 0 or self.y
++ self.currentImage.get_rect().height <
+(vehicles[self.direction][self.lane][self.index -
+1].y - gap2) or self.x +
+self.currentImage.get_rect().width <
+(vehicles[self.direction][self.lane][self.index -
+1].x - gap2):
+self.y += self.speed
+else:
+if (self.x +
+self.currentImage.get_rect().width <= self.stop or
+self.crossed == 1 or (currentGreen == 0 and
+currentYellow == 0)) and (self.index == 0 or self.x
++ self.currentImage.get_rect().width <
+(vehicles[self.direction][self.lane][self.index -
+1].x - gap2) or
+(vehicles[self.direction][self.lane][self.index -
+1].turned == 1)):
+self.x += self.speed
+elif(self.direction=='down'):
+if(self.crossed==0 and
+self.y+self.currentImage.get_rect().height>stopLines
+[self.direction]):
+100self.crossed = 1
+vehicles[self.direction]['crossed']
++= 1
+if(self.willTurn==1):
+if(self.crossed==0 or
+self.y+self.currentImage.get_rect().height<mid[self.
+direction]['y']):
+if((self.y+self.currentImage.get_rect().height<=self
+.stop or (currentGreen==1 and currentYellow==0) or
+self.crossed==1) and (self.index==0 or
+self.y+self.currentImage.get_rect().height<(vehicles
+[self.direction][self.lane][self.index-1].y - gap2)
+or vehicles[self.direction][self.lane][self.index-
+1].turned==1)):
+self.y += self.speed
+else:
+if(self.turned==0):
+self.rotateAngle +=
+rotationAngle
+self.currentImage =
+pygame.transform.rotate(self.originalImage, -
+self.rotateAngle)
+self.x -= 2.5
+self.y += 2
+if(self.rotateAngle==90):
+self.turned = 1
+else:
+if(self.index==0 or
+self.x>(vehicles[self.direction][self.lane][self.ind
+ex-1].x +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().width + gap2) or
+self.y<(vehicles[self.direction][self.lane][self.ind
+ex-1].y - gap2)):
+self.x -= self.speed
+else:
+101if((self.y+self.currentImage.get_rect().height<=self
+.stop or self.crossed == 1 or (currentGreen==1 and
+currentYellow==0)) and (self.index==0 or
+self.y+self.currentImage.get_rect().height<(vehicles
+[self.direction][self.lane][self.index-1].y - gap2)
+or (vehicles[self.direction][self.lane][self.index-
+1].turned==1))):
+self.y += self.speed
+elif(self.direction=='left'):
+if(self.crossed==0 and
+self.x<stopLines[self.direction]):
+self.crossed = 1
+vehicles[self.direction]['crossed']
++= 1
+if(self.willTurn==1):
+if(self.crossed==0 or
+self.x>mid[self.direction]['x']):
+if((self.x>=self.stop or
+(currentGreen==2 and currentYellow==0) or
+self.crossed==1) and (self.index==0 or
+self.x>(vehicles[self.direction][self.lane][self.ind
+ex-1].x +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().width + gap2) or
+vehicles[self.direction][self.lane][self.index-
+1].turned==1)):
+self.x -= self.speed
+else:
+if(self.turned==0):
+self.rotateAngle +=
+rotationAngle
+self.currentImage =
+pygame.transform.rotate(self.originalImage, -
+self.rotateAngle)
+self.x -= 1.8
+self.y -= 2.5
+102if(self.rotateAngle==90):
+self.turned = 1
+# path =
+"/Users/my/Desktop/FYP2/darkflow/images/down" +
+directionNumbers[((self.direction_number+1)%noOfSign
+als)] + "/" + self.vehicleClass + ".png"
+# self.x =
+mid[self.direction]['x']
+# self.y =
+mid[self.direction]['y']
+# self.currentImage =
+pygame.image.load(path)
+else:
+if(self.index==0 or
+self.y>(vehicles[self.direction][self.lane][self.ind
+ex-1].y +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().height + gap2) or
+self.x>(vehicles[self.direction][self.lane][self.ind
+ex-1].x + gap2)):
+self.y -= self.speed
+else:
+if((self.x>=self.stop or
+self.crossed == 1 or (currentGreen==2 and
+currentYellow==0)) and (self.index==0 or
+self.x>(vehicles[self.direction][self.lane][self.ind
+ex-1].x +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().width + gap2) or
+(vehicles[self.direction][self.lane][self.index-
+1].turned==1))):
+# (if the image has not reached its
+stop coordinate or has crossed stop line or has
+green signal) and (it is either the first vehicle in
+that lane or it is has enough gap to the next
+vehicle in that lane)
+self.x -= self.speed # move the
+vehicle
+103# if((self.x>=self.stop or self.crossed
+== 1 or (currentGreen==2 and currentYellow==0)) and
+(self.index==0 or
+self.x>(vehicles[self.direction][self.lane][self.ind
+ex-1].x +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().width + gap2))):
+# self.x -= self.speed
+elif(self.direction=='up'):
+if(self.crossed==0 and
+self.y<stopLines[self.direction]):
+self.crossed = 1
+vehicles[self.direction]['crossed']
++= 1
+if(self.willTurn==1):
+if(self.crossed==0 or
+self.y>mid[self.direction]['y']):
+if((self.y>=self.stop or
+(currentGreen==3 and currentYellow==0) or
+self.crossed == 1) and (self.index==0 or
+self.y>(vehicles[self.direction][self.lane][self.ind
+ex-1].y +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().height + gap2) or
+vehicles[self.direction][self.lane][self.index-
+1].turned==1)):
+self.y -= self.speed
+else:
+if(self.turned==0):
+self.rotateAngle +=
+rotationAngle
+self.currentImage =
+pygame.transform.rotate(self.originalImage, -
+self.rotateAngle)
+self.x += 1
+self.y -= 1
+if(self.rotateAngle==90):
+self.turned = 1
+104else:
+if(self.index==0 or
+self.x<(vehicles[self.direction][self.lane][self.ind
+ex-1].x -
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().width - gap2) or
+self.y>(vehicles[self.direction][self.lane][self.ind
+ex-1].y + gap2)):
+self.x += self.speed
+else:
+if((self.y>=self.stop or
+self.crossed == 1 or (currentGreen==3 and
+currentYellow==0)) and (self.index==0 or
+self.y>(vehicles[self.direction][self.lane][self.ind
+ex-1].y +
+vehicles[self.direction][self.lane][self.index-
+1].currentImage.get_rect().height + gap2) or
+(vehicles[self.direction][self.lane][self.index-
+1].turned==1))):
+self.y -= self.speed
+# Similar logic for other directions (down,
+left, up)...
+# Initialization of signals with default values
+def initialize():
+ts1 = TrafficSignal(0, defaultYellow,
+defaultGreen, defaultMinimum, defaultMaximum)
+signals.append(ts1)
+ts2 =
+TrafficSignal(ts1.red+ts1.yellow+ts1.green,
+defaultYellow, defaultGreen, defaultMinimum,
+defaultMaximum)
+signals.append(ts2)
+ts3 = TrafficSignal(defaultRed, defaultYellow,
+defaultGreen, defaultMinimum, defaultMaximum)
+signals.append(ts3)
+ts4 = TrafficSignal(defaultRed, defaultYellow,
+defaultGreen, defaultMinimum, defaultMaximum)
+105signals.append(ts4)
+repeat()
+# Set time according to formula
+def setTime():
+global noOfCars, noOfBikes, noOfBuses,
+noOfTrucks, noOfRickshaws, noOfLanes
+global carTime, busTime, truckTime,
+rickshawTime, bikeTime
+os.system("say detecting vehicles,
+"+directionNumbers[(currentGreen+1)%noOfSignals])
+noOfCars, noOfBuses, noOfTrucks, noOfRickshaws,
+noOfBikes = 0,0,0,0,0
+for j in
+range(len(vehicles[directionNumbers[nextGreen]][0]))
+:
+vehicle =
+vehicles[directionNumbers[nextGreen]][0][j]
+if(vehicle.crossed==0):
+vclass = vehicle.vehicleClass
+# print(vclass)
+noOfBikes += 1
+for i in range(1,3):
+for j in
+range(len(vehicles[directionNumbers[nextGreen]][i]))
+:
+vehicle =
+vehicles[directionNumbers[nextGreen]][i][j]
+if(vehicle.crossed==0):
+vclass = vehicle.vehicleClass
+# print(vclass)
+if(vclass=='car'):
+noOfCars += 1
+elif(vclass=='bus'):
+noOfBuses += 1
+elif(vclass=='truck'):
+noOfTrucks += 1
+106elif(vclass=='rickshaw'):
+noOfRickshaws += 1
+# print(noOfCars)
+greenTime = math.ceil(((noOfCars*carTime) +
+(noOfRickshaws*rickshawTime) + (noOfBuses*busTime) +
+(noOfTrucks*truckTime)+
+(noOfBikes*bikeTime))/(noOfLanes+1))
+# greenTime =
+math.ceil((noOfVehicles)/noOfLanes)
+print('Green Time: ',greenTime)
+if(greenTime<defaultMinimum):
+greenTime = defaultMinimum
+elif(greenTime>defaultMaximum):
+greenTime = defaultMaximum
+# greenTime = random.randint(15,50)
+signals[(currentGreen+1)%(noOfSignals)].green =
+greenTime
+def repeat():
+global currentGreen, currentYellow, nextGreen
+while(signals[currentGreen].green>0): # while
+the timer of current green signal is not zero
+printStatus()
+updateValues()
+if(signals[(currentGreen+1)%(noOfSignals)].red==dete
+ctionTime): # set time of next green signal
+thread =
+threading.Thread(name="detection",target=setTime,
+args=())
+thread.daemon = True
+thread.start()
+# setTime()
+time.sleep(1)
+currentYellow = 1 # set yellow signal on
+vehicleCountTexts[currentGreen] = "0"
+# reset stop coordinates of lanes and vehicles
+for i in range(0,3):
+107stops[directionNumbers[currentGreen]][i] =
+defaultStop[directionNumbers[currentGreen]]
+for vehicle in
+vehicles[directionNumbers[currentGreen]][i]:
+vehicle.stop =
+defaultStop[directionNumbers[currentGreen]]
+while(signals[currentGreen].yellow>0): # while
+the timer of current yellow signal is not zero
+printStatus()
+updateValues()
+time.sleep(1)
+currentYellow = 0 # set yellow signal off
+# reset all signal times of current signal to
+default times
+signals[currentGreen].green = defaultGreen
+signals[currentGreen].yellow = defaultYellow
+signals[currentGreen].red = defaultRed
+currentGreen = nextGreen # set next signal as
+green signal
+nextGreen = (currentGreen+1)%noOfSignals #
+set next green signal
+signals[nextGreen].red =
+signals[currentGreen].yellow+signals[currentGreen].g
+reen # set the red time of next to next signal as
+(yellow time + green time) of next signal
+repeat()
+# Print the signal timers on cmd
+def printStatus():
+for i in range(0, noOfSignals):
+if(i==currentGreen):
+if(currentYellow==0):
+print(" GREEN TS",i+1,"->
+r:",signals[i].red," y:",signals[i].yellow,"
+g:",signals[i].green)
+else:
+108print("YELLOW TS",i+1,"->
+r:",signals[i].red," y:",signals[i].yellow,"
+g:",signals[i].green)
+else:
+print(" RED TS",i+1,"->
+r:",signals[i].red," y:",signals[i].yellow,"
+g:",signals[i].green)
+print()
+# Update values of the signal timers after every
+second
+def updateValues():
+for i in range(0, noOfSignals):
+if(i==currentGreen):
+if(currentYellow==0):
+signals[i].green-=1
+signals[i].totalGreenTime+=1
+else:
+signals[i].yellow-=1
+else:
+signals[i].red-=1
+# Generating vehicles in the simulation
+def generateVehicles():
+while(True):
+vehicle_type = random.randint(0,4)
+if(vehicle_type==4):
+lane_number = 0
+else:
+lane_number = random.randint(0,1) + 1
+will_turn = 0
+if(lane_number==2):
+temp = random.randint(0,4)
+if(temp<=2):
+will_turn = 1
+elif(temp>2):
+will_turn = 0
+temp = random.randint(0,999)
+109direction_number = 0
+a = [400,800,900,1000]
+if(temp<a[0]):
+direction_number = 0
+elif(temp<a[1]):
+direction_number = 1
+elif(temp<a[2]):
+direction_number = 2
+elif(temp<a[3]):
+direction_number = 3
+Vehicle(lane_number,
+vehicleTypes[vehicle_type], direction_number,
+directionNumbers[direction_number], will_turn)
+time.sleep(0.75)
+def simulationTime():
+global timeElapsed, simTime
+while(True):
+timeElapsed += 1
+time.sleep(1)
+if(timeElapsed==simTime):
+totalVehicles = 0
+print('Lane-wise Vehicle Counts')
+for i in range(noOfSignals):
+print('Lane',i+1,':',vehicles[directionNumbers[i]]['
+crossed'])
+totalVehicles +=
+vehicles[directionNumbers[i]]['crossed']
+print('Total vehicles passed:
+',totalVehicles)
+print('Total time passed: ',timeElapsed)
+print('No. of vehicles passed per unit
+time: ',(float(totalVehicles)/float(timeElapsed)))
+os._exit(1)
+class Main:
+110thread4 =
+threading.Thread(name="simulationTime",
+target=simulationTime, args=())
+thread4.daemon = True
+thread4.start()
+thread2 =
+threading.Thread(name="initialization",
+target=initialize, args=())
+thread2.daemon = True
+thread2.start()
+black = (0, 0, 0)
+white = (255, 255, 255)
+screenWidth = 1400
+screenHeight = 800
+screenSize = (screenWidth, screenHeight)
+background =
+pygame.image.load('/Users/my/Desktop/FYP2/darkflow/m
+od_int.png')
+screen = pygame.display.set_mode(screenSize)
+pygame.display.set_caption("SIMULATION")
+redSignal =
+pygame.image.load('/Users/my/Desktop/FYP2/darkflow/s
+ignals/red.png')
+yellowSignal =
+pygame.image.load('/Users/my/Desktop/FYP2/darkflow/s
+ignals/yellow.png')
+greenSignal =
+pygame.image.load('/Users/my/Desktop/FYP2/darkflow/s
+ignals/green.png')
+font = pygame.font.Font(None, 30)
+111thread3 =
+threading.Thread(name="generateVehicles",
+target=generateVehicles, args=())
+thread3.daemon = True
+thread3.start()
+while True:
+for event in pygame.event.get():
+if event.type == pygame.QUIT:
+sys.exit()
+screen.blit(background, (0, 0))
+for i in range(0, noOfSignals):
+if i == currentGreen:
+if currentYellow == 1:
+if signals[i].yellow == 0:
+signals[i].signalText =
+"STOP"
+else:
+signals[i].signalText =
+signals[i].yellow
+screen.blit(yellowSignal,
+signalCoods[i])
+else:
+if signals[i].green == 0:
+signals[i].signalText =
+"SLOW"
+else:
+signals[i].signalText =
+signals[i].green
+screen.blit(greenSignal,
+signalCoods[i])
+else:
+if signals[i].red <= 10:
+if signals[i].red == 0:
+signals[i].signalText = "GO"
+else:
+112signals[i].signalText =
+signals[i].red
+else:
+signals[i].signalText = "---"
+screen.blit(redSignal,
+signalCoods[i])
+signalTexts = ["", "", "", ""]
+for i in range(0, noOfSignals):
+signalTexts[i] =
+font.render(str(signals[i].signalText), True, white,
+black)
+screen.blit(signalTexts[i],
+signalTimerCoods[i])
+displayText =
+vehicles[directionNumbers[i]]['crossed']
+vehicleCountTexts[i] =
+font.render(str(displayText), True, black, white)
+screen.blit(vehicleCountTexts[i],
+vehicleCountCoods[i])
+timeElapsedText = font.render(("Time
+Elapsed: " + str(timeElapsed)), True, black, white)
+screen.blit(timeElapsedText, (1100, 50))
+for vehicle in simulation:
+screen.blit(vehicle.currentImage,
+[vehicle.x, vehicle.y])
+vehicle.move()
+pygame.display.update()
+main()
+113
