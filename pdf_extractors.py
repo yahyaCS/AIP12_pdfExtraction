@@ -4,7 +4,7 @@ import pdfplumber
 import fitz  # PyMuPDF
 
 
-def extract(pdf_path):
+def pypdf_extractor(pdf_path):
     start = time.time()
     try:
         reader = pypdf.PdfReader(pdf_path)
@@ -13,7 +13,7 @@ def extract(pdf_path):
     except Exception as e:
         return {"chars": f"error: {e}", "time": round(time.time() - start, 3)}
 
-def extract(pdf_path):
+def pdfplumber_extractor(pdf_path):
     start = time.time()
     try:
         with pdfplumber.open(pdf_path) as pdf:
@@ -22,7 +22,7 @@ def extract(pdf_path):
     except Exception as e:
         return {"chars": f"error: {e}", "time": round(time.time() - start, 3)}
 
-def extract(pdf_path):
+def pymupdf_extractor(pdf_path):
     start = time.time()
     try:
         doc = fitz.open(pdf_path)
