@@ -5,13 +5,16 @@ It measures the extraction time and number of extracted characters for compariso
 
 ## 📂 Project Structure
 
-| File / Folder       | Description                                                     |
-| ------------------- | --------------------------------------------------------------- |
-| `results/`          | Stores evaluation results (CSV files)                           |
-| `pdf_extractors.py` | Contains extractor functions for pypdf, pdfplumber, and pymupdf |
-| `evaluator.py`      | Runs all extractors and collects results                        |
-| `run_evaluation.py` | Main script to execute the evaluation                           |
-| `README.md`         | Project documentation                                           |
+| File / Folder                    | Description                                                     |
+| -------------------------------- | --------------------------------------------------------------- |
+| `results/`                       | Stores all results (CSV + extracted text)                       |
+| `results/evaluation_results.csv` | Aggregated metrics (chars & time for each extractor per PDF)    |
+| `results/text_outputs/`          | Extracted text files for each PDF and extractor                 |
+| `pdf_extractors.py`              | Contains extractor functions for pypdf, pdfplumber, and pymupdf |
+| `evaluator.py`                   | Runs all extractors, saves metrics, and writes extracted text   |
+| `run_evaluation.py`              | Main script to execute the evaluation                           |
+| `README.md`                      | Project documentation                                           |
+
 
 
 ## 📦 Dependencies
@@ -24,12 +27,22 @@ It measures the extraction time and number of extracted characters for compariso
 
 ## 📊 Example Output
 
+### CSV (evaluation_results.csv)
+
 | File        | pypdf\_chars | pypdf\_time | pdfplumber\_chars | pdfplumber\_time | pymupdf\_chars | pymupdf\_time |
 | ----------- | ------------ | ----------- | ----------------- | ---------------- | -------------- | ------------- |
 | sample2.pdf | 23,077       | 0.318s      | 21,986            | 1.280s           | 23,079         | 0.177s        |
 | sample.pdf  | 72,593       | 0.840s      | 67,580            | 3.671s           | 51,183         | 0.204s        |
 | fyp.pdf     | 137,180      | 3.905s      | 124,133           | 11.176s          | 137,257        | 0.409s        |
 
+### Extracted Text Files (results/text_outputs/)
+
+Each extractor writes a separate .txt file, e.g.:
+```
+results/text_outputs/sample2_pypdf.txt
+results/text_outputs/sample2_pdfplumber.txt
+results/text_outputs/sample2_pymupdf.txt
+```
 ## 📝 Conclusion
 
 Based on the evaluation across multiple runs on sample PDFs:
